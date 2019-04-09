@@ -9,6 +9,8 @@ class StaticObject {
     Sprite_Width;
     Sprite_Height;
     visible = true;
+    gravity = 0.05;
+    gravitySpeed = 0;
     constructor(width, height,posX, posY,ImgSrc,Sprite_X,Sprite_Y,Sprite_Width,Sprite_Height)
     {
         this.width = width;
@@ -24,13 +26,13 @@ class StaticObject {
 
     Draw(context)
     {
-        if(this.visible === true)
-        {
-            context.drawImage(this.ImgSrc,this.Sprite_X,this.Sprite_Y,this.Sprite_Width,
-                this.Sprite_Height,this.x,this.y,this.width,this.height);
-        }
+        // if(this.visible === true)
+        // {
+        //     context.drawImage(this.ImgSrc,this.Sprite_X,this.Sprite_Y,this.Sprite_Width,
+        //         this.Sprite_Height,this.x,this.y,this.width,this.height);
+        // }
         //Debugging Collision just let this run
-        // context.fillRect(this.x,this.y,this.width,this.height);
+        context.fillRect(this.x,this.y,this.width,this.height);
     }
     /*
      * This takes in another object of one of these three crashes and makes sure it is not touching or in the current object
@@ -57,18 +59,18 @@ class StaticObject {
         {
             this.hascrash = false;
         }
-        //Former Collision detection mainly works but even then
-        // if (this.x < (OtherObject.returnPositionX() + OtherObject.returnWidth()) &&
-        //     (this.x + this.width) > OtherObject.returnPositionY() &&
-        //     this.y < (OtherObject.returnPositionY() + OtherObject.returnHeight()) &&
-        //     (this.y + this.height) > OtherObject.returnPositionY())
-        // {
-        //     console.log();
-        //     this.hascrash = true;
-        // }
         return this.hascrash;
     }
 
+    updatePosition()
+    {
+        this.gravitySpeed += this.gravity;
+        this.y += this.gravitySpeed;
+    }
+    accelerate(n)
+    {
+       this.gravity = n
+    }
     getVisible()
     {
         return this.visible;
