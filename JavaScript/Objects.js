@@ -67,10 +67,6 @@ class StaticObject {
         this.gravitySpeed += this.gravity;
         this.y += this.gravitySpeed;
     }
-    accelerate(n)
-    {
-       this.gravity = n
-    }
     getVisible()
     {
         return this.visible;
