@@ -12,6 +12,10 @@ var mainGame = function()
     this.IsOver = false;
     this.SPRITEIMAGE = new Image();
 
+    //Toasts
+    this.STARTLINK = document.getElementById("startLink");
+    this.STARTTOAST = document.getElementById("mobileWelcomeToast");
+    this.CONTROLTOAST = document.getElementById("controlLink");
 
     this.TestCharacter= new StaticObject(30,30,20,20,this.SPRITEIMAGE,20,20,20,20);
 };
@@ -46,7 +50,11 @@ mainGame.prototype =
             }
         },
 
+        startGame: function()
+        {
 
+
+        },
 
 
 
@@ -109,12 +117,6 @@ mainGame.prototype =
             MainGame.resizeElement(
                 document.getElementById('main-canvas'),
                 arenaWidth, arenaHeight);
-
-            // MainGame.resizeElement(snailBait.mobileWelcomeToast,
-            //     arenaWidth, arenaHeight);
-            //
-            // MainGame.resizeElement(snailBait.mobileStartToast,
-            //     arenaWidth, arenaHeight);
         },
         resizeElement: function (element, w, h) {
             element.style.width  = w + 'px';
@@ -123,10 +125,19 @@ mainGame.prototype =
 
 
 
-
+        AddMenuOptions: function()
+        {
+            MainGame.STARTLINK.addEventListener('click',function(e)
+            {
+                MainGame.startGame();
+                MainGame.STARTTOAST.style.display = "none";
+                MainGame.STARTTOAST.style.opacity = 0;
+            })
+        },
         //Tomas
         AddTouchEventControllers: function()
         {
+            console.log("HEY");
             MainGame.canvas.addEventListener('touchstart',MainGame.touchStart);
             MainGame.canvas.addEventListener('touchend',MainGame.touchEnd);
             MainGame.canvas.addEventListener('touchmove',MainGame.touchPause)
@@ -135,7 +146,7 @@ mainGame.prototype =
         touchStart: function(e)
         {
             var x = e.changedTouches[0].pageX;
-            console.log("NIGGA")
+            console.log("NIGGA");
             MainGame.jetPack(-0.2);
             e.preventDefault();
         },
@@ -183,6 +194,7 @@ MainGame.detectMobile();
 if(MainGame.mobile)
 {
     MainGame.AddTouchEventControllers();
+    MainGame.AddMenuOptions();
 }
 MainGame.GameUpdateLoop();
 window.addEventListener("resize", MainGame.fitScreen);

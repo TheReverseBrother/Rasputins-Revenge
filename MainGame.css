@@ -8,3 +8,72 @@ body{
     color: blue;
     background-color: blue;
 }
+
+
+.mobile-toast {
+    position: absolute;
+    border-radius: 10px;
+
+    font: 30px Roboto;
+    text-align: center;
+    text-shadow: 1px 1px 1px yellow;
+
+    color: firebrick;
+
+    -webkit-transition: opacity 1s;
+    -moz-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+
+    display: block;
+    z-index: 1;
+    opacity: 1;
+}
+
+#mobileWelcomeToast {
+    width: 690px;
+    height: 400px;
+}
+
+.startGame{
+    font: 40px Roboto;
+    color: palevioletred;
+    text-shadow: 2px 2px 2px blue;
+}
+
+.snailbait-welcome-link:hover {
+    color: GREEN;
+}
+
+#initialImage {
+    text-align: center;
+    padding: 25px;
+    margin-bottom: 30px;
+    font: 24px Roboto;
+    text-shadow: 1px 1px 1px black;
+}
+
+#initialMessage{
+    font: 18px Roboto;
+    text-shadow: 1px 1px 1px black;
+    color: white;
+}
+
+#snailbait-mobile-instructions {
+    margin-left: 155px;
+    padding-left: 5px;
+    padding-top: 10px;
+    height: 2em;
+
+    color: #ff0;
+    font-size: 0.95em;
+
+    -webkit-transition: opacity 5s;
+    -moz-transition: opacity 5s;
+    -o-transition: opacity 5s;
+    transition: opacity 5s;
+
+    display: block;
+    opacity: 1;
+}
+
