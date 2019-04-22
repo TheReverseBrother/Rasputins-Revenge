@@ -31,18 +31,14 @@ body{
 }
 
 #mobileWelcomeToast {
-    width: 690px;
-    height: 400px;
+    width: 680px;
+    height: 300px;
 }
 
 .startGame{
     font: 40px Roboto;
     color: palevioletred;
     text-shadow: 2px 2px 2px blue;
-}
-
-.snailbait-welcome-link:hover {
-    color: GREEN;
 }
 
 #initialImage {
