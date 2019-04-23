@@ -33,6 +33,15 @@ body{
 #mobileWelcomeToast {
     width: 680px;
     height: 300px;
+    display: none;
+    opacity: 0;
+}
+#controlToast
+{
+    width: 680px;
+    height: 300px;
+    display: none;
+    opacity: 0;
 }
 
 .startGame{
@@ -54,22 +63,3 @@ body{
     text-shadow: 1px 1px 1px black;
     color: white;
 }
-
-#snailbait-mobile-instructions {
-    margin-left: 155px;
-    padding-left: 5px;
-    padding-top: 10px;
-    height: 2em;
-
-    color: #ff0;
-    font-size: 0.95em;
-
-    -webkit-transition: opacity 5s;
-    -moz-transition: opacity 5s;
-    -o-transition: opacity 5s;
-    transition: opacity 5s;
-
-    display: block;
-    opacity: 1;
-}
-

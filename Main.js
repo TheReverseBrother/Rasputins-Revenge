@@ -7,15 +7,18 @@ var mainGame = function()
     this.CANVAS_HEIGHT = 300;
 
     //Booleans
-    this.HasStarted = true;
+    this.HasStarted = false;
     this.IsPause = false;
     this.IsOver = false;
     this.SPRITEIMAGE = new Image();
+    this.controlMenu = false;
 
     //Toasts
     this.STARTLINK = document.getElementById("startLink");
+    this.STARTCONTROLLINK = document.getElementById("startControlLink");
     this.STARTTOAST = document.getElementById("mobileWelcomeToast");
     this.CONTROLLINK= document.getElementById("controlLink");
+    this.CONTROLTOAST= document.getElementById('controlToast');
 
     this.TestCharacter= new StaticObject(30,30,20,20,this.SPRITEIMAGE,20,20,20,20);
 };
@@ -27,11 +30,9 @@ mainGame.prototype =
             if(MainGame.IsPause === false && MainGame.IsOver === false)
             {
                 MainGame.clear();
-                // MainGame.drawMobileInstructions();
                 MainGame.TestCharacter.updatePosition();
                 MainGame.TestCharacter.Draw(MainGame.ctx);
             }
-
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
 
@@ -50,14 +51,6 @@ mainGame.prototype =
                 MainGame.IsPause = false;
             }
         },
-
-        startGame: function()
-        {
-
-
-        },
-
-
 
         //All Mobile Elements Go Beyond Here
         //Tomas
@@ -119,26 +112,50 @@ mainGame.prototype =
                 document.getElementById('main-canvas'), arenaWidth, arenaHeight);
 
             MainGame.resizeElement(document.getElementById('mobileWelcomeToast'),arenaWidth,arenaHeight);
+            MainGame.resizeElement(document.getElementById('controlToast'),arenaWidth,arenaHeight);
+
         },
+
         resizeElement: function (element, w, h) {
             element.style.width  = w + 'px';
             element.style.height = h + 'px';
         },
 
+        startMobileMenu: function()
+        {
+            MainGame.STARTTOAST.style.display = "block";
+            MainGame.STARTTOAST.style.opacity = 1;
+        },
 
 
         AddMenuOptions: function()
         {
             MainGame.STARTLINK.addEventListener('click',function(e)
             {
-                MainGame.startGame();
+                MainGame.HasStarted = true;
+                MainGame.GameUpdateLoop();
                 MainGame.STARTTOAST.style.display = "none";
                 MainGame.STARTTOAST.style.opacity = 0;
+                MainGame.CONTROLTOAST.style.display = "none";
+                MainGame.CONTROLTOAST.style.opacity = 0;
             });
 
             MainGame.CONTROLLINK.addEventListener('click',function()
             {
+                MainGame.drawMobileInstructions();
+                MainGame.controlMenu = true;
+                MainGame.STARTTOAST.style.display = "none";
+                MainGame.STARTTOAST.style.opacity = 0;
+                MainGame.CONTROLTOAST.style.display = "block";
+                MainGame.CONTROLTOAST.style.opacity = 1;
+            });
 
+            MainGame.STARTCONTROLLINK.addEventListener('click', function()
+            {
+                MainGame.GameUpdateLoop();
+                MainGame.HasStarted = true;
+                MainGame.CONTROLTOAST.style.display = "none";
+                MainGame.CONTROLTOAST.style.opacity = 0;
             });
         },
         //Tomas
@@ -219,7 +236,7 @@ mainGame.prototype =
             MainGame.ctx.textAlign = 'center';
             MainGame.ctx.textBaseline = 'middle';
 
-            MainGame.ctx.font = '26px fantasy';
+            MainGame.ctx.font = '20px fantasy';
 
             MainGame.ctx.shadowBlur = 2;
             MainGame.ctx.shadowOffsetX = 2;
@@ -232,14 +249,9 @@ mainGame.prototype =
 
         drawControls : function()
         {
-            MainGame.ctx.save();
-            MainGame.ctx.fillStyle = 'red';
-            MainGame.ctx.font = '20px Arial';
-            // MainGame.ctx.fillText('Tap This side to keep Player up', 150, 30);
-            // MainGame.ctx.fillText('Tap This side to Shoot', 450, 30);
-
-
-            MainGame.ctx.restore();
+            MainGame.ctx.fillText('Tap This side to keep Player up', 150, 30);
+            MainGame.ctx.fillText('Tap This side to Shoot', 500, 30);
+            MainGame.ctx.fillText('Swipe this side to pause', 500, 260);
         }
     };
 //Tomas
@@ -268,7 +280,11 @@ if(MainGame.mobile)
 {
     MainGame.AddTouchEventControllers();
     MainGame.AddMenuOptions();
+    MainGame.startMobileMenu();
 }
-MainGame.GameUpdateLoop();
+else
+{
+    MainGame.GameUpdateLoop();
+}
 window.addEventListener("resize", MainGame.fitScreen);
 window.addEventListener("orientationchange", MainGame.fitScreen);
