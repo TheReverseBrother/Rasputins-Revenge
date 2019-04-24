@@ -46,6 +46,12 @@ var mainGame = function()
     this.BG_SPRITE_HEIGHT= 163;
     this.BG_SPRITE_WIDTH= 335;
 
+    //Sounds
+    this.SHOOTING_SOUND = new Audio("./Sounds/gunshot.mp3");
+    this.SONG1_SOUND = new Audio("./Sounds/Rasputin8Bit.mp3");
+    this.SONG2_SOUND = new Audio("./Sounds/RasputinRemix.mp3");
+    this.DEATH_SOUND = new Audio("./Sounds/GameOver.mp3");
+
 
     //Booleans
     this.HasStarted = false;
