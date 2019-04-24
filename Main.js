@@ -6,6 +6,47 @@ var mainGame = function()
     this.CANVAS_WIDTH = 680;
     this.CANVAS_HEIGHT = 300;
 
+    //Sprite Sheet
+    this.SpriteImg = new Image();
+    this.SpriteImg.src = "./Images/SpriteSheet.png";
+
+    //Flying Sprite
+    this.Charfly = [
+        { PLAYER_X : 78, PLAYER_Y : 27, PLAYER_WIDTH : 55, PLAYER_HEIGHT : 48},
+        { PLAYER_X : 13, PLAYER_Y : 27, PLAYER_WIDTH : 55, PLAYER_HEIGHT : 48},
+    ];
+
+    //Shooting Sprite
+    this.Charshoot = [
+        { PLAYER_X : 142, PLAYER_Y : 27, PLAYER_WIDTH : 62, PLAYER_HEIGHT : 48},
+        { PLAYER_X : 205, PLAYER_Y : 27, PLAYER_WIDTH : 62, PLAYER_HEIGHT : 48},
+    ];
+
+    //Player Death
+    this.CHTR_SPRITE_X = 266;
+    this.CHTR_SPRITE_Y= 49;
+    this.CHTR_SPRITE_HEIGHT= 31;
+    this.CHTR_SPRITE_WIDTH= 59;
+
+    //Bullet
+    this.BULLET_SPRITE_X = 372;
+    this.BULLET_SPRITE_Y= 38;
+    this.BULLET_SPRITE_HEIGHT= 18;
+    this.BULLET_SPRITE_WIDTH= 22;
+
+    //Enemy
+    this.ENEMY_SPRITE_X = 334;
+    this.ENEMY_SPRITE_Y= 33;
+    this.ENEMY_SPRITE_HEIGHT= 36;
+    this.ENEMY_SPRITE_WIDTH= 36;
+
+    //Background
+    this.BG_SPRITE_X = 0;
+    this.BG_SPRITE_Y= 87;
+    this.BG_SPRITE_HEIGHT= 163;
+    this.BG_SPRITE_WIDTH= 335;
+
+
     //Booleans
     this.HasStarted = false;
     this.IsPause = false;
