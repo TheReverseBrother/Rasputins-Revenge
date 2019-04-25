@@ -131,7 +131,6 @@ class AnimatedObject
     {
         if(this.visible === true)
         {
-            console.log("Here i am");
             this.cell = this.cells[this.cellIndex];
 
             context.drawImage(this.ImgSrc, this.cell.SPRITE_X,
