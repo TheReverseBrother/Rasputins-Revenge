@@ -9,8 +9,11 @@ var mainGame = function()
     //Counts
     this.COUNTER = 0;
     this.WAVES = 0;
-    this.ENEMY_SPEED = -1;
 
+    //Const
+    this.ENEMY_SPEED = -1;
+    this.STANDARD_DELAY = 5;
+    this.CHTR_DELAY = 8;
     //Arrays
     this.PositionArray = [700,700,680, 720,740,760,780,800,820];
     this.EnemyArray = [];
@@ -75,7 +78,7 @@ var mainGame = function()
     this.CONTROLTOAST= document.getElementById('controlToast');
 
     // this.TestCharacter= new StaticObject(36,36,20,20,this.SPRITEIMAGE,this.ENEMY);
-    this.TestCharacter= new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60);
+    this.TestCharacter= new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);
 };
 
 mainGame.prototype =
@@ -85,9 +88,9 @@ mainGame.prototype =
             if(MainGame.IsPause === false && MainGame.IsOver === false)
             {
                 MainGame.clear();
+                MainGame.checkEndConditions();
                 MainGame.backgroundManager();
-                // MainGame.TestCharacter.gravityBehaviour();
-                MainGame.TestCharacter.render(MainGame.ctx);
+                MainGame.characterManager();
                 MainGame.enemyManager();
                 MainGame.bulletManager();
             }
@@ -108,6 +111,47 @@ mainGame.prototype =
             {
                 MainGame.IsPause = false;
             }
+        },
+
+        checkEndConditions: function()
+        {
+          MainGame.EnemyReachesEnd();
+          MainGame.EnemyCollidesWithPlayer();
+        },
+
+        EnemyReachesEnd: function()
+        {
+            for(let i = 0; i < MainGame.EnemyArray.length; i+=1)
+            {
+                if(MainGame.EnemyArray[i].getVisible())
+                {
+                    if(MainGame.EnemyArray[i].x === - MainGame.EnemyArray[i].width)
+                    {
+                        MainGame.IsOver = true;
+                    }
+                }
+            }
+        },
+
+        EnemyCollidesWithPlayer: function()
+        {
+            for(let i = 0; i < MainGame.EnemyArray.length; i+=1)
+            {
+                if(MainGame.EnemyArray[i].getVisible()) {
+                    if (MainGame.TestCharacter.checkCrash(MainGame.EnemyArray[i]))
+                    {
+                        MainGame.IsOver = true;
+                        MainGame.TestCharacter.setInVisible();
+                        MainGame.EnemyArray[i].setInVisible();
+                    }
+                }
+            }
+        },
+
+        characterManager: function()
+        {
+            // MainGame.TestCharacter.gravityBehaviour();
+            MainGame.TestCharacter.render(MainGame.ctx);
         },
 
         startGame: function()
@@ -159,6 +203,7 @@ mainGame.prototype =
             MainGame.renderEnemies();
 
         },
+
         renderEnemies: function()
         {
             for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
@@ -196,7 +241,6 @@ mainGame.prototype =
             }
         },
 
-
         bulletManager: function()
         {
             MainGame.renderBullets();
@@ -229,6 +273,7 @@ mainGame.prototype =
                 MainGame.BulletArray[i].Draw(MainGame.ctx);
             }
         },
+
         bulletMovementBehaviour: function()
         {
             for(let i = 0; i < MainGame.BulletArray.length; i +=1)
@@ -236,6 +281,7 @@ mainGame.prototype =
                 MainGame.BulletArray[i].updatePositionX(MainGame.BULLET_SPEED);
             }
         },
+
         createBullet: function()
         {
             let x = MainGame.TestCharacter.x + MainGame.TestCharacter.width;
@@ -243,6 +289,7 @@ mainGame.prototype =
             MainGame.BulletArray.push(new StaticObject(20,20,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
 
         },
+
         //All Mobile Elements Go Beyond Here
         //Tomas
         detectMobile: function()
@@ -259,6 +306,7 @@ mainGame.prototype =
                     window.innerHeight || 0)
             };
         },
+
         calculateArenaSize: function (viewportSize) {
             var DESKTOP_ARENA_WIDTH  = 680,  // Pixels
                 DESKTOP_ARENA_HEIGHT = 300,  // Pixels
@@ -290,6 +338,7 @@ mainGame.prototype =
                 height: arenaHeight
             };
         },
+
         fitScreen: function () {
             var arenaSize = MainGame.calculateArenaSize(
                 MainGame.getViewportSize());
@@ -349,6 +398,7 @@ mainGame.prototype =
                 MainGame.CONTROLTOAST.style.opacity = 0;
             });
         },
+
         //Tomas
         AddTouchEventControllers: function()
         {
@@ -357,6 +407,7 @@ mainGame.prototype =
             MainGame.canvas.addEventListener('touchend',MainGame.touchEnd);
             MainGame.canvas.addEventListener('touchmove',MainGame.touchPause)
         },
+
         //Tomas
         touchStart: function(e)
         {
@@ -374,6 +425,7 @@ mainGame.prototype =
 
             e.preventDefault();
         },
+
         //Tomas
         touchEnd: function(e)
         {
@@ -385,6 +437,7 @@ mainGame.prototype =
 
             e.preventDefault();
         },
+
         touchPause: function(e)
         {
             var x = e.changedTouches[0].pageX;
@@ -395,11 +448,13 @@ mainGame.prototype =
 
             e.preventDefault();
         },
+
         //Tomas
         jetPack: function(g)
         {
             // MainGame.TestCharacter.gravity = g
         },
+
         drawMobileInstructions: function () {
             var cw = this.canvas.width,
                 ch = this.canvas.height,
@@ -423,6 +478,7 @@ mainGame.prototype =
             MainGame.ctx.lineTo(cw/2, ch);
             MainGame.ctx.stroke();
         },
+
         initializeContextForMobileInstructions: function () {
             MainGame.ctx.textAlign = 'center';
             MainGame.ctx.textBaseline = 'middle';
@@ -479,5 +535,5 @@ else
     MainGame.startGame();
     MainGame.GameUpdateLoop();
 }
-window.addEventListener("resize", MainGame.fitScreen);
+// window.addEventListener("resize", MainGame.fitScreen);
 window.addEventListener("orientationchange", MainGame.fitScreen);
