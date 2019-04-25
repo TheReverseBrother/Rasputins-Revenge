@@ -6,6 +6,17 @@ var mainGame = function()
     this.CANVAS_WIDTH = 680;
     this.CANVAS_HEIGHT = 300;
 
+    //Counts
+    this.COUNTER = 0;
+    this.WAVES = 0;
+    this.ENEMY_SPEED = -1;
+
+    //Arrays
+    this.PositionArray = [700,700,680, 720,740,760,780,800,820];
+    this.EnemyArray = [];
+    this.BulletArray = [];
+    this.BULLET_SPEED = 1;
+
     //Sprite Sheet
     this.SPRITEIMAGE = new Image();
     this.SPRITEIMAGE.src = "./images/SpriteSheet.png";
@@ -75,9 +86,9 @@ mainGame.prototype =
             {
                 MainGame.clear();
                 MainGame.backgroundManager();
-                MainGame.TestCharacter.gravityBehaviour();
+                // MainGame.TestCharacter.gravityBehaviour();
                 MainGame.TestCharacter.render(MainGame.ctx);
-                MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,334,33,36,36,100,100,50,50);
+                MainGame.enemyManager();
             }
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
@@ -100,20 +111,72 @@ mainGame.prototype =
 
         startGame: function()
         {
-            setInterval(function(){
-                console.log("SUPP")
-            },1000);
+            MainGame.HasStarted = true;
+            setInterval(MainGame.difficultyManager,5000);
         },
 
-        spawnEnemy: function()
+        difficultyManager: function()
         {
-
+            console.log("WELLL");
+            console.log(MainGame.COUNTER);
+            if(MainGame.HasStarted)
+            {
+                if(!MainGame.IsPause && MainGame.COUNTER === 0)
+                {
+                    console.log("in here");
+                    MainGame.spawnEnemy(1);
+                }
+                else
+                {
+                    var z = Math.floor((Math.random() * MainGame.COUNTER) + 1);
+                    MainGame.spawnEnemy(z);
+                }
+                if((MainGame.WAVES % 12) === 0)
+                {
+                    MainGame.ENEMY_SPEED -= 1;
+                    MainGame.COUNTER = MainGame.COUNTER/2;
+                }
+            }
         },
 
+        spawnEnemy: function(number)
+        {
+            MainGame.COUNTER += 1;
+            for(let i = 0; i <= number; i += 1)
+            {
+                var z = Math.floor((Math.random() * 4) + 1);
+                var y = Math.floor((Math.random() * 270) + 1);
+
+                MainGame.EnemyArray.push(new StaticObject(36,36,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.ENEMY));
+            }
+            MainGame.WAVES +=1
+        },
+
+        enemyManager: function()
+        {
+            MainGame.enemyMovementBehaviour();
+            MainGame.renderEnemies();
+
+        },
+        renderEnemies: function()
+        {
+            for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
+            {
+                MainGame.EnemyArray[i].Draw(MainGame.ctx);
+            }
+        },
+
+        enemyMovementBehaviour: function()
+        {
+            for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
+            {
+                MainGame.EnemyArray[i].updatePositionX(MainGame.ENEMY_SPEED);
+            }
+        },
         backgroundManager: function()
         {
-            MainGame.BACKGROUND_IMAGE_OFFSET += -1;
-            MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET += -1;
+            MainGame.BACKGROUND_IMAGE_OFFSET += -0.5;
+            MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET += -0.5;
             MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X,
                 MainGame.BG_SPRITE_Y,MainGame.BG_SPRITE_WIDTH,MainGame.BG_SPRITE_HEIGHT,
                 MainGame.BACKGROUND_IMAGE_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT
@@ -130,11 +193,20 @@ mainGame.prototype =
             {
                 MainGame.BACKGROUND_IMAGE_OFFSET = MainGame.CANVAS_WIDTH;
             }
-
-
-
         },
 
+
+        bulletManager: function()
+        {
+
+        },
+        createBullet: function()
+        {
+            let x = MainGame.TestCharacter.returnPositionX() + MainGame.TestCharacter.width;
+            let y = MainGame.TestCharacter.returnPositionY();
+            MainGame.BulletArray.push(new StaticObject(5,5,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
+
+        },
         //All Mobile Elements Go Beyond Here
         //Tomas
         detectMobile: function()
@@ -290,7 +362,7 @@ mainGame.prototype =
         //Tomas
         jetPack: function(g)
         {
-            MainGame.TestCharacter.gravity = g
+            // MainGame.TestCharacter.gravity = g
         },
         drawMobileInstructions: function () {
             var cw = this.canvas.width,
