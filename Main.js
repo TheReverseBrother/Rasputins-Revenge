@@ -89,6 +89,7 @@ mainGame.prototype =
                 // MainGame.TestCharacter.gravityBehaviour();
                 MainGame.TestCharacter.render(MainGame.ctx);
                 MainGame.enemyManager();
+                MainGame.bulletManager();
             }
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
@@ -198,13 +199,48 @@ mainGame.prototype =
 
         bulletManager: function()
         {
+            MainGame.renderBullets();
+            MainGame.bulletMovementBehaviour();
+            MainGame.bulletEnemyCollision();
+        },
 
+        bulletEnemyCollision: function()
+        {
+            for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
+            {
+                for(let j = 0; j < MainGame.BulletArray.length; j+= 1)
+                {
+                    if(MainGame.EnemyArray[i].getVisible() && MainGame.BulletArray[j].getVisible())
+                    {
+                        if(MainGame.BulletArray[j].checkCrash(MainGame.EnemyArray[i]))
+                        {
+                            MainGame.EnemyArray[i].setInVisible();
+                            MainGame.BulletArray[j].setInVisible();
+                        }
+                    }
+                }
+            }
+        },
+
+        renderBullets: function()
+        {
+            for(let i = 0; i < MainGame.BulletArray.length; i +=1)
+            {
+                MainGame.BulletArray[i].Draw(MainGame.ctx);
+            }
+        },
+        bulletMovementBehaviour: function()
+        {
+            for(let i = 0; i < MainGame.BulletArray.length; i +=1)
+            {
+                MainGame.BulletArray[i].updatePositionX(MainGame.BULLET_SPEED);
+            }
         },
         createBullet: function()
         {
-            let x = MainGame.TestCharacter.returnPositionX() + MainGame.TestCharacter.width;
-            let y = MainGame.TestCharacter.returnPositionY();
-            MainGame.BulletArray.push(new StaticObject(5,5,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
+            let x = MainGame.TestCharacter.x + MainGame.TestCharacter.width;
+            let y = MainGame.TestCharacter.y + 10;
+            MainGame.BulletArray.push(new StaticObject(20,20,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
 
         },
         //All Mobile Elements Go Beyond Here
@@ -423,7 +459,8 @@ window.addEventListener('keydown', function(e){
 
     if(key === 32)
     {
-        MainGame.jetPack(-0.2);
+        // MainGame.jetPack(-0.2);
+        MainGame.createBullet();
     }
 });
 
