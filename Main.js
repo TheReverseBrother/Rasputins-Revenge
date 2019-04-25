@@ -26,8 +26,8 @@ var mainGame = function()
 
     //Flying Sprite
     this.Charfly = [
-        { SPRITE_X : 78, SPRITE_Y : 27, SPRITE_WIDTH : 55, SPRITE_HEIGHT : 48},
-        { SPRITE_X : 13, SPRITE_Y : 27, SPRITE_WIDTH : 55, SPRITE_HEIGHT : 48},
+        { SPRITE_X : 78, SPRITE_Y : 30, SPRITE_WIDTH : 55, SPRITE_HEIGHT : 48},
+        { SPRITE_X : 13, SPRITE_Y : 30, SPRITE_WIDTH : 55, SPRITE_HEIGHT : 48},
     ];
 
     //Shooting Sprite
@@ -117,6 +117,7 @@ mainGame.prototype =
         {
           MainGame.EnemyReachesEnd();
           MainGame.EnemyCollidesWithPlayer();
+          MainGame.playerHitsBottomOrTop();
         },
 
         EnemyReachesEnd: function()
@@ -148,9 +149,17 @@ mainGame.prototype =
             }
         },
 
+        playerHitsBottomOrTop: function()
+        {
+          if((MainGame.TestCharacter.y <= 0)|| (MainGame.TestCharacter.y >= 260))
+          {
+              MainGame.IsOver = true;
+          }
+        },
+
         characterManager: function()
         {
-            // MainGame.TestCharacter.gravityBehaviour();
+            MainGame.TestCharacter.gravityBehaviour();
             MainGame.TestCharacter.render(MainGame.ctx);
         },
 
@@ -452,7 +461,7 @@ mainGame.prototype =
         //Tomas
         jetPack: function(g)
         {
-            // MainGame.TestCharacter.gravity = g
+            MainGame.TestCharacter.gravity = g
         },
 
         drawMobileInstructions: function () {
@@ -515,8 +524,8 @@ window.addEventListener('keydown', function(e){
 
     if(key === 32)
     {
-        // MainGame.jetPack(-0.2);
-        MainGame.createBullet();
+        MainGame.jetPack(-0.2);
+        // MainGame.createBullet();
     }
 });
 
