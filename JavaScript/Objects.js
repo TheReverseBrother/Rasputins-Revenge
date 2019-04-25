@@ -116,8 +116,9 @@ class AnimatedObject
     counter = 0;
     gravity = 0.05;
     gravitySpeed = 0;
+    delay;
 
-    constructor(Image,cells,posX,posY,width,height)
+    constructor(Image,cells,posX,posY,width,height,delay)
     {
         this.ImgSrc = Image;
         this.cells = cells;
@@ -125,6 +126,7 @@ class AnimatedObject
         this.y = posY;
         this.width = width;
         this.height = height;
+        this.delay = delay;
     }
 
     render(context)
@@ -144,7 +146,7 @@ class AnimatedObject
     advance()
     {
         this.counter++;
-        let z = this.counter % 5;
+        let z = this.counter % this.delay;
         if(z === 0)
         {
             if (this.cellIndex === this.cells.length-1)
