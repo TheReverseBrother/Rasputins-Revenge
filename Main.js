@@ -83,6 +83,7 @@ var mainGame = function()
 
 mainGame.prototype =
     {
+        //Author: Tomas
         GameUpdateLoop : function(now) {
             // MainGame.refreshLoop();
             if(MainGame.IsPause === false && MainGame.IsOver === false)
@@ -97,10 +98,12 @@ mainGame.prototype =
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
 
+        //Author: Tomas
         clear : function(){
             this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         },
 
+        //Author: Tomas
         pause: function()
         {
             if(MainGame.IsPause === false )
@@ -113,6 +116,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         checkEndConditions: function()
         {
           MainGame.EnemyReachesEnd();
@@ -120,6 +124,7 @@ mainGame.prototype =
           MainGame.playerHitsBottomOrTop();
         },
 
+        //Author: Tomas
         EnemyReachesEnd: function()
         {
             for(let i = 0; i < MainGame.EnemyArray.length; i+=1)
@@ -134,6 +139,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         EnemyCollidesWithPlayer: function()
         {
             for(let i = 0; i < MainGame.EnemyArray.length; i+=1)
@@ -149,6 +155,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         playerHitsBottomOrTop: function()
         {
           if((MainGame.TestCharacter.y <= 0)|| (MainGame.TestCharacter.y >= 260))
@@ -157,18 +164,21 @@ mainGame.prototype =
           }
         },
 
+        //Author: Tomas
         characterManager: function()
         {
             MainGame.TestCharacter.gravityBehaviour();
             MainGame.TestCharacter.render(MainGame.ctx);
         },
 
+        //Author: Tomas
         startGame: function()
         {
             MainGame.HasStarted = true;
             setInterval(MainGame.difficultyManager,5000);
         },
 
+        //Author: Tomas
         difficultyManager: function()
         {
             console.log("WELLL");
@@ -193,6 +203,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         spawnEnemy: function(number)
         {
             MainGame.COUNTER += 1;
@@ -206,6 +217,7 @@ mainGame.prototype =
             MainGame.WAVES +=1
         },
 
+        //Author: Tomas
         enemyManager: function()
         {
             MainGame.enemyMovementBehaviour();
@@ -213,6 +225,7 @@ mainGame.prototype =
 
         },
 
+        //Author: Tomas
         renderEnemies: function()
         {
             for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
@@ -221,6 +234,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         enemyMovementBehaviour: function()
         {
             for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
@@ -228,6 +242,8 @@ mainGame.prototype =
                 MainGame.EnemyArray[i].updatePositionX(MainGame.ENEMY_SPEED);
             }
         },
+
+        //Author: Tomas
         backgroundManager: function()
         {
             MainGame.BACKGROUND_IMAGE_OFFSET += -0.5;
@@ -250,6 +266,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         bulletManager: function()
         {
             MainGame.renderBullets();
@@ -257,6 +274,7 @@ mainGame.prototype =
             MainGame.bulletEnemyCollision();
         },
 
+        //Author: Tomas
         bulletEnemyCollision: function()
         {
             for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
@@ -275,6 +293,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         renderBullets: function()
         {
             for(let i = 0; i < MainGame.BulletArray.length; i +=1)
@@ -283,6 +302,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         bulletMovementBehaviour: function()
         {
             for(let i = 0; i < MainGame.BulletArray.length; i +=1)
@@ -291,6 +311,7 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
         createBullet: function()
         {
             let x = MainGame.TestCharacter.x + MainGame.TestCharacter.width;
