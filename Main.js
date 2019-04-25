@@ -7,44 +7,41 @@ var mainGame = function()
     this.CANVAS_HEIGHT = 300;
 
     //Sprite Sheet
-    this.SpriteImg = new Image();
-    this.SpriteImg.src = "./Images/SpriteSheet.png";
+    this.SPRITEIMAGE = new Image();
+    this.SPRITEIMAGE.src = "./images/SpriteSheet.png";
 
     //Flying Sprite
     this.Charfly = [
-        { PLAYER_X : 78, PLAYER_Y : 27, PLAYER_WIDTH : 55, PLAYER_HEIGHT : 48},
-        { PLAYER_X : 13, PLAYER_Y : 27, PLAYER_WIDTH : 55, PLAYER_HEIGHT : 48},
+        { SPRITE_X : 78, SPRITE_Y : 27, SPRITE_WIDTH : 55, SPRITE_HEIGHT : 48},
+        { SPRITE_X : 13, SPRITE_Y : 27, SPRITE_WIDTH : 55, SPRITE_HEIGHT : 48},
     ];
 
     //Shooting Sprite
     this.Charshoot = [
-        { PLAYER_X : 142, PLAYER_Y : 27, PLAYER_WIDTH : 62, PLAYER_HEIGHT : 48},
-        { PLAYER_X : 205, PLAYER_Y : 27, PLAYER_WIDTH : 62, PLAYER_HEIGHT : 48},
+        { SPRITE_X : 142, SPRITE_Y : 27, SPRITE_WIDTH : 62, SPRITE_HEIGHT : 48},
+        { SPRITE_X : 205, SPRITE_Y : 27, SPRITE_WIDTH : 62, SPRITE_HEIGHT : 48},
     ];
 
     //Player Death
-    this.CHTR_SPRITE_X = 266;
-    this.CHTR_SPRITE_Y= 49;
-    this.CHTR_SPRITE_HEIGHT= 31;
-    this.CHTR_SPRITE_WIDTH= 59;
-
+    this.ChtrSpriteDeath = [
+        {SPRITE_X : 266, SPRITE_Y : 49, SPRITE_HEIGHT : 31, SPRITE_WIDTH: 59}
+    ];
     //Bullet
-    this.BULLET_SPRITE_X = 372;
-    this.BULLET_SPRITE_Y= 38;
-    this.BULLET_SPRITE_HEIGHT= 18;
-    this.BULLET_SPRITE_WIDTH= 22;
-
+    this.BULLET = [
+        {SPRITE_X : 372, SPRITE_Y : 38, SPRITE_HEIGHT : 18, SPRITE_WIDTH: 22}
+    ];
     //Enemy
-    this.ENEMY_SPRITE_X = 334;
-    this.ENEMY_SPRITE_Y= 33;
-    this.ENEMY_SPRITE_HEIGHT= 36;
-    this.ENEMY_SPRITE_WIDTH= 36;
+    this.ENEMY = [
+        {SPRITE_X: 334, SPRITE_Y: 33, SPRITE_HEIGHT: 36, SPRITE_WIDTH: 36}
+    ];
 
     //Background
     this.BG_SPRITE_X = 0;
-    this.BG_SPRITE_Y= 87;
-    this.BG_SPRITE_HEIGHT= 163;
+    this.BG_SPRITE_Y= 90;
+    this.BG_SPRITE_HEIGHT= 150;
     this.BG_SPRITE_WIDTH= 335;
+    this.BACKGROUND_IMAGE_OFFSCREEN_OFFSET =680;
+    this.BACKGROUND_IMAGE_OFFSET =0;
 
     //Sounds
     this.SHOOTING_SOUND = new Audio("./Sounds/gunshot.mp3");
@@ -57,7 +54,6 @@ var mainGame = function()
     this.HasStarted = false;
     this.IsPause = false;
     this.IsOver = false;
-    this.SPRITEIMAGE = new Image();
     this.controlMenu = false;
 
     //Toasts
@@ -67,7 +63,8 @@ var mainGame = function()
     this.CONTROLLINK= document.getElementById("controlLink");
     this.CONTROLTOAST= document.getElementById('controlToast');
 
-    this.TestCharacter= new StaticObject(30,30,20,20,this.SPRITEIMAGE,20,20,20,20);
+    // this.TestCharacter= new StaticObject(36,36,20,20,this.SPRITEIMAGE,this.ENEMY);
+    this.TestCharacter= new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60);
 };
 
 mainGame.prototype =
@@ -77,8 +74,10 @@ mainGame.prototype =
             if(MainGame.IsPause === false && MainGame.IsOver === false)
             {
                 MainGame.clear();
-                MainGame.TestCharacter.updatePosition();
-                MainGame.TestCharacter.Draw(MainGame.ctx);
+                MainGame.backgroundManager();
+                MainGame.TestCharacter.gravityBehaviour();
+                MainGame.TestCharacter.render(MainGame.ctx);
+                MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,334,33,36,36,100,100,50,50);
             }
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
@@ -97,6 +96,43 @@ mainGame.prototype =
             {
                 MainGame.IsPause = false;
             }
+        },
+
+        startGame: function()
+        {
+            setInterval(function(){
+                console.log("SUPP")
+            },1000);
+        },
+
+        spawnEnemy: function()
+        {
+
+        },
+
+        backgroundManager: function()
+        {
+            MainGame.BACKGROUND_IMAGE_OFFSET += -1;
+            MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET += -1;
+            MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X,
+                MainGame.BG_SPRITE_Y,MainGame.BG_SPRITE_WIDTH,MainGame.BG_SPRITE_HEIGHT,
+                MainGame.BACKGROUND_IMAGE_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT
+            );
+            MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X,
+                MainGame.BG_SPRITE_Y,MainGame.BG_SPRITE_WIDTH,MainGame.BG_SPRITE_HEIGHT,
+                MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT
+            );
+            if(MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET === -MainGame.CANVAS_WIDTH)
+            {
+                MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET = MainGame.CANVAS_WIDTH;
+            }
+            if(MainGame.BACKGROUND_IMAGE_OFFSET === -MainGame.CANVAS_WIDTH)
+            {
+                MainGame.BACKGROUND_IMAGE_OFFSET = MainGame.CANVAS_WIDTH;
+            }
+
+
+
         },
 
         //All Mobile Elements Go Beyond Here
@@ -331,6 +367,7 @@ if(MainGame.mobile)
 }
 else
 {
+    MainGame.startGame();
     MainGame.GameUpdateLoop();
 }
 window.addEventListener("resize", MainGame.fitScreen);
