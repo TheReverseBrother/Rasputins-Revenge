@@ -4,35 +4,30 @@ class StaticObject {
     x;
     y;
     ImgSrc;
-    Sprite_X;
-    Sprite_Y;
-    Sprite_Width;
-    Sprite_Height;
     visible = true;
     gravity = 0.05;
     gravitySpeed = 0;
-    constructor(width, height,posX, posY,ImgSrc,Sprite_X,Sprite_Y,Sprite_Width,Sprite_Height)
+    cell;
+    constructor(width, height,posX, posY,ImgSrc,cells)
     {
         this.width = width;
         this.height = height;
         this.x = posX;
         this.y = posY;
         this.ImgSrc = ImgSrc;
-        this.Sprite_X = Sprite_X;
-        this.Sprite_Y = Sprite_Y;
-        this.Sprite_Width = Sprite_Width;
-        this.Sprite_Height = Sprite_Height;
+        this.cell = cells[0];
     }
 
     Draw(context)
     {
-        // if(this.visible === true)
-        // {
-        //     context.drawImage(this.ImgSrc,this.Sprite_X,this.Sprite_Y,this.Sprite_Width,
-        //         this.Sprite_Height,this.x,this.y,this.width,this.height);
-        // }
+        if(this.visible === true)
+        {
+            context.drawImage(this.ImgSrc,this.cell.SPRITE_X,
+                this.cell.SPRITE_Y, this.cell.SPRITE_WIDTH,
+                this.cell.SPRITE_HEIGHT,this.x,this.y,this.width,this.height);
+        }
         //Debugging Collision just let this run
-        context.fillRect(this.x,this.y,this.width,this.height);
+        // context.fillRect(this.x,this.y,this.width,this.height);
     }
     /*
      * This takes in another object of one of these three crashes and makes sure it is not touching or in the current object
@@ -62,7 +57,7 @@ class StaticObject {
         return this.hascrash;
     }
 
-    updatePosition()
+    gravityBehaviour()
     {
         this.gravitySpeed += this.gravity;
         this.y += this.gravitySpeed;
@@ -119,6 +114,8 @@ class AnimatedObject
     cell;
     visible = true;
     counter = 0;
+    gravity = 0.05;
+    gravitySpeed = 0;
 
     constructor(Image,cells,posX,posY,width,height)
     {
@@ -140,6 +137,7 @@ class AnimatedObject
             context.drawImage(this.ImgSrc, this.cell.SPRITE_X,
                 this.cell.SPRITE_Y, this.cell.SPRITE_WIDTH,
                 this.cell.SPRITE_HEIGHT , this.x, this.y, this.width, this.height);
+            this.advance();
         }
         // context.fillRect(20,30,30,30);
     }
@@ -186,6 +184,11 @@ class AnimatedObject
         return this.hascrash;
     }
 
+    gravityBehaviour()
+    {
+        this.gravitySpeed += this.gravity;
+        this.y += this.gravitySpeed;
+    }
     updatePosX(value)
     {
         this.x += value;
