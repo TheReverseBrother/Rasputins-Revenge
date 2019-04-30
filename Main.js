@@ -48,6 +48,16 @@ var mainGame = function()
     this.ENEMY = [
         {SPRITE_X: 334, SPRITE_Y: 33, SPRITE_HEIGHT: 36, SPRITE_WIDTH: 36}
     ];
+    //Nuke
+    this.NUKE = [
+        { SPRITE_X : 344, SPRITE_Y : 91, SPRITE_WIDTH : 47, SPRITE_HEIGHT : 40},
+        { SPRITE_X : 399, SPRITE_Y : 72, SPRITE_WIDTH : 53, SPRITE_HEIGHT : 55},
+    ];
+    //Heart
+    this.HEART = [
+        {SPRITE_X: 415, SPRITE_Y: 39, SPRITE_HEIGHT: 18, SPRITE_WIDTH: 19}
+    ];
+
 
     //Background
     this.BG_SPRITE_X = 0;
