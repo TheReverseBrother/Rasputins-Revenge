@@ -78,6 +78,8 @@ var mainGame = function()
     this.SONG1_SOUND = new Audio("./Sounds/Rasputin8Bit.mp3");
     this.SONG2_SOUND = new Audio("./Sounds/RasputinRemix.mp3");
     this.DEATH_SOUND = new Audio("./Sounds/GameOver.mp3");
+    this.NUKE_SOUND = new Audio("./Sounds/nuke.mp3");
+
 
 
     //Booleans

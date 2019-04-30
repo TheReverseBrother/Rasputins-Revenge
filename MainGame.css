@@ -1,6 +1,11 @@
 body{
     color: Black;
     background-color: red;
+    background-image: url("images/BG.jpg");
+    background-position: center;
+    background-size: auto;
+    background-repeat: no-repeat;
+
 }
 
 #main-canvas
