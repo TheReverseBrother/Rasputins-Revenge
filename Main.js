@@ -396,7 +396,50 @@ mainGame.prototype =
                 }
             }
         },
-        
+
+        //Author: Nathan
+        spawnHeart: function(number)
+        {
+            for(let i = 0; i <= number; i += 1)
+            {
+                var z = Math.floor((Math.random() * 4) + 1);
+                var y = Math.floor((Math.random() * 270) + 1);
+
+                MainGame.HeartArray.push(new StaticObject(18,19,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.HEART));
+            }
+        },
+
+        //Author: Nathan
+        heartManager: function()
+        {
+            MainGame.renderHeart();
+            MainGame.HeartCollidesWithPlayer;
+
+        },
+
+        //Author: Nathan
+        renderHeart: function()
+        {
+            for(let i = 0; i < MainGame.HeartArray.length; i +=1)
+            {
+                MainGame.HeartArray[i].Draw(MainGame.ctx);
+            }
+        },
+
+        //Author: Nathan
+        HeartCollidesWithPlayer: function()
+        {
+            for(let i = 0; i < MainGame.HeartArray.length; i+=1)
+            {
+                if(MainGame.HeartArray[i].getVisible()) {
+                    if (MainGame.TestCharacter.checkCrash(MainGame.HeartArray[i]))
+                    {
+                        //add life to player
+                        MainGame.HeartArray[i].setInVisible();
+                    }
+                }
+            }
+        },
 
 
 
