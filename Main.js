@@ -14,11 +14,17 @@ var mainGame = function()
     this.ENEMY_SPEED = -1;
     this.STANDARD_DELAY = 5;
     this.CHTR_DELAY = 8;
+
     //Arrays
     this.PositionArray = [700,700,680, 720,740,760,780,800,820];
     this.EnemyArray = [];
     this.BulletArray = [];
     this.BULLET_SPEED = 1;
+
+    //Power ups
+    this.HeartArray = [];
+    this.NukeArray = [];
+    this.NUKE_SPEED = -1;
 
     //Sprite Sheet
     this.SPRITEIMAGE = new Image();
@@ -104,6 +110,8 @@ mainGame.prototype =
                 MainGame.characterManager();
                 MainGame.enemyManager();
                 MainGame.bulletManager();
+                MainGame.nukeManager();
+                MainGame.heartManager();
             }
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
@@ -329,6 +337,68 @@ mainGame.prototype =
             MainGame.BulletArray.push(new StaticObject(20,20,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
 
         },
+
+        //Author: Nathan
+        spawnNuke: function(number)
+        {
+            for(let i = 0; i <= number; i += 1)
+            {
+                var z = Math.floor((Math.random() * 4) + 1);
+                var y = Math.floor((Math.random() * 270) + 1);
+
+                MainGame.NukeArray.push(new StaticObject(47,40,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.NUKE));
+            }
+        },
+
+        //Author: Nathan
+        nukeManager: function()
+        {
+            MainGame.renderNuke();
+            MainGame.nukeMovementBehaviour();
+            MainGame.bulletNukeCollision();
+
+        },
+
+        //Author: Nathan
+        renderNuke: function()
+        {
+            for(let i = 0; i < MainGame.NukeArray.length; i +=1)
+            {
+                MainGame.NukeArray[i].Draw(MainGame.ctx);
+            }
+        },
+
+        //Author: Nathan
+        nukeMovementBehaviour: function()
+        {
+            for(let i = 0; i < MainGame.NukeArray.length; i +=1)
+            {
+                MainGame.NukeArray[i].updatePositionX(MainGame.NUKE_SPEED);
+            }
+        },
+
+        //Author: Nathan
+        bulletNukeCollision: function()
+        {
+            for(let i = 0; i < MainGame.NukeArray.length; i +=1)
+            {
+                for(let j = 0; j < MainGame.BulletArray.length; j+= 1)
+                {
+                    if(MainGame.NukeArray[i].getVisible() && MainGame.BulletArray[j].getVisible())
+                    {
+                        if(MainGame.BulletArray[j].checkCrash(MainGame.NukeArray[i]))
+                        {
+                            MainGame.NukeArray[i].setInVisible();
+                            MainGame.BulletArray[j].setInVisible();
+
+                        }
+                    }
+                }
+            }
+        },
+        
+
+
 
         //All Mobile Elements Go Beyond Here
         //Tomas
