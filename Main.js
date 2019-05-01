@@ -126,6 +126,10 @@ mainGame.prototype =
                 MainGame.HUDmanager();
                 console.log("Lives "+MainGame.Lives)
             }
+            if(MainGame.IsOver)
+            {
+                MainGame.saveScore();
+            }
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
 
@@ -169,6 +173,10 @@ mainGame.prototype =
 
         drawHiScore: function()
         {
+            if(MainGame.SCORE > MainGame.HIGH_SCORE)
+            {
+                MainGame.HIGH_SCORE = MainGame.SCORE;
+            }
             let string = "HiScore : "+ MainGame.HIGH_SCORE;
 
             MainGame.ctx.fillText(string,570,285);
@@ -257,6 +265,7 @@ mainGame.prototype =
         {
             MainGame.HasStarted = true;
             MainGame.addLivesToArray();
+            MainGame.setHighScoreOnStart();
             setInterval(MainGame.difficultyManager,5000);
         },
 
@@ -369,6 +378,7 @@ mainGame.prototype =
                         {
                             MainGame.EnemyArray[i].setInVisible();
                             MainGame.BulletArray[j].setInVisible();
+                            MainGame.SCORE += 1;
                         }
                     }
                 }
@@ -506,6 +516,26 @@ mainGame.prototype =
         },
 
 
+        setHighScoreOnStart: function()
+        {
+            let cookie =  document.cookie;
+
+            if (cookie === "")
+            {
+                MainGame.HIGH_SCORE = 0;
+            }
+            else
+            {
+                let split = cookie.split("=");
+                let x = split[1];
+                MainGame.HIGH_SCORE = parseInt(x);
+            }
+        },
+
+        saveScore: function()
+        {
+            document.cookie = "high_SCORE=" +MainGame.HIGH_SCORE;
+        },
 
         //All Mobile Elements Go Beyond Here
         //Tomas
