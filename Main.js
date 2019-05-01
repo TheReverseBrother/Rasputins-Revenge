@@ -9,16 +9,20 @@ var mainGame = function()
     //Counts
     this.COUNTER = 0;
     this.WAVES = 0;
+    this.SCORE = 0;
+    this.HIGH_SCORE = 0;
 
     //Const
     this.ENEMY_SPEED = -1;
     this.STANDARD_DELAY = 5;
     this.CHTR_DELAY = 8;
+    this.Lives = 2;
 
     //Arrays
     this.PositionArray = [700,700,680, 720,740,760,780,800,820];
     this.EnemyArray = [];
     this.BulletArray = [];
+    this.LifeArray = [];
     this.BULLET_SPEED = 1;
 
     //Power ups
@@ -97,6 +101,10 @@ var mainGame = function()
 
     // this.TestCharacter= new StaticObject(36,36,20,20,this.SPRITEIMAGE,this.ENEMY);
     this.TestCharacter= new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);
+    this.lifeOne = new StaticObject(30,30,5,265,this.SPRITEIMAGE,this.HEART);
+    this.lifeTwo = new StaticObject(30,30,35,265,this.SPRITEIMAGE,this.HEART);
+    this.lifeThree = new StaticObject(30,30,65,265,this.SPRITEIMAGE,this.HEART);
+
 };
 
 mainGame.prototype =
@@ -107,6 +115,7 @@ mainGame.prototype =
             if(MainGame.IsPause === false && MainGame.IsOver === false)
             {
                 MainGame.clear();
+                // console.log("Lives "+MainGame.Lives)
                 MainGame.checkEndConditions();
                 MainGame.backgroundManager();
                 MainGame.characterManager();
@@ -114,6 +123,8 @@ mainGame.prototype =
                 MainGame.bulletManager();
                 MainGame.nukeManager();
                 MainGame.heartManager();
+                MainGame.HUDmanager();
+                console.log("Lives "+MainGame.Lives)
             }
             requestAnimationFrame(MainGame.GameUpdateLoop);
         },
@@ -123,6 +134,47 @@ mainGame.prototype =
             this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         },
 
+        addLivesToArray: function()
+        {
+            MainGame.LifeArray.push(MainGame.lifeOne);
+            MainGame.LifeArray.push(MainGame.lifeTwo);
+            MainGame.LifeArray.push(MainGame.lifeThree);
+        },
+
+        HUDmanager: function()
+        {
+          MainGame.drawLives();
+          MainGame.drawScore();
+          MainGame.drawHiScore();
+        },
+
+        drawLives: function()
+        {
+            for(let i = 0; i <= MainGame.Lives; i ++)
+            {
+                MainGame.LifeArray[i].Draw(MainGame.ctx);
+            }
+        },
+
+        drawScore: function()
+        {
+            MainGame.ctx.save();
+
+            let string = "Score : "+ MainGame.SCORE;
+            MainGame.ctx.font = "20px Arial";
+            MainGame.ctx.fillStyle = "Pink";
+            MainGame.ctx.fillText(string,580,25);
+
+        },
+
+        drawHiScore: function()
+        {
+            let string = "HiScore : "+ MainGame.HIGH_SCORE;
+
+            MainGame.ctx.fillText(string,570,285);
+
+            MainGame.ctx.restore();
+        },
         //Author: Tomas
         pause: function()
         {
@@ -142,8 +194,15 @@ mainGame.prototype =
           MainGame.EnemyReachesEnd();
           MainGame.EnemyCollidesWithPlayer();
           MainGame.playerHitsBottomOrTop();
+          MainGame.CheckLives();
         },
-
+        CheckLives: function()
+        {
+          if(MainGame.Lives < 0)
+          {
+              MainGame.IsOver = true;
+          }
+        },
         //Author: Tomas
         EnemyReachesEnd: function()
         {
@@ -153,7 +212,8 @@ mainGame.prototype =
                 {
                     if(MainGame.EnemyArray[i].x === - MainGame.EnemyArray[i].width)
                     {
-                        MainGame.IsOver = true;
+                        MainGame.Lives -=1;
+                        MainGame.EnemyArray[i].setInVisible();
                     }
                 }
             }
@@ -167,8 +227,9 @@ mainGame.prototype =
                 if(MainGame.EnemyArray[i].getVisible()) {
                     if (MainGame.TestCharacter.checkCrash(MainGame.EnemyArray[i]))
                     {
-                        MainGame.IsOver = true;
-                        MainGame.TestCharacter.setInVisible();
+                        // MainGame.IsOver = true;
+                        MainGame.Lives -=1;
+                        // MainGame.TestCharacter.setInVisible();
                         MainGame.EnemyArray[i].setInVisible();
                     }
                 }
@@ -178,7 +239,7 @@ mainGame.prototype =
         //Author: Tomas
         playerHitsBottomOrTop: function()
         {
-          if((MainGame.TestCharacter.y <= 0)|| (MainGame.TestCharacter.y >= 260))
+          if((MainGame.TestCharacter.y <= -30)|| (MainGame.TestCharacter.y >= 300))
           {
               MainGame.IsOver = true;
           }
@@ -195,6 +256,7 @@ mainGame.prototype =
         startGame: function()
         {
             MainGame.HasStarted = true;
+            MainGame.addLivesToArray();
             setInterval(MainGame.difficultyManager,5000);
         },
 
@@ -672,6 +734,10 @@ window.addEventListener('keydown', function(e){
     {
         MainGame.jetPack(-0.2);
         // MainGame.createBullet();
+    }
+    if(key === 39)
+    {
+        MainGame.createBullet();
     }
 });
 
