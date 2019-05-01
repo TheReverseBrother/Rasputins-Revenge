@@ -667,6 +667,7 @@ mainGame.prototype =
             else
             {
                 // Shooting Function
+                MainGame.createBullet();
                 console.log("PEW");
             }
 
