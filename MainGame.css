@@ -68,3 +68,30 @@ body{
     text-shadow: 1px 1px 1px black;
     color: white;
 }
+#controlToast
+{
+    width: 680px;
+    height: 300px;
+    display: none;
+    opacity: 0;
+}
+#restartToast
+{
+    width: 680px;
+    height: 300px;
+    display: none;
+    opacity: 0;
+}
+#restartMessage
+{
+    font: 18px Roboto;
+    text-shadow: 1px 1px 1px black;
+    color: white;
+}
+#restartDiv {
+    text-align: center;
+    padding: 200px;
+    margin-bottom: 30px;
+    font: 24px Roboto;
+    text-shadow: 1px 1px 1px black;
+}

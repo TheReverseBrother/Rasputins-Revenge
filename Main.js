@@ -10,6 +10,7 @@ var mainGame = function()
     //Animation And Timeout Ids
     this.id = 0;
     this.IntervalID = 0;
+    this.EndAnimID = 0;
 
     //Counts
     this.COUNTER = 0;
@@ -27,7 +28,6 @@ var mainGame = function()
     this.PositionArray = [700,700,680, 720,740,760,780,800,820];
     this.EnemyArray = [];
     this.BulletArray = [];
-    this.LifeArray = [];
     this.BULLET_SPEED = 1;
 
     //Power ups
@@ -103,6 +103,8 @@ var mainGame = function()
     this.STARTTOAST = document.getElementById("mobileWelcomeToast");
     this.CONTROLLINK= document.getElementById("controlLink");
     this.CONTROLTOAST= document.getElementById('controlToast');
+    this.RESTARTTOAST = document.getElementById('restartToast');
+    this.RESTARTLINK = document.getElementById('restartLink');
 
     // this.TestCharacter= new StaticObject(36,36,20,20,this.SPRITEIMAGE,this.ENEMY);
     this.TestCharacter= new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);
@@ -112,7 +114,7 @@ var mainGame = function()
     this.lifeTwo = new StaticObject(30,30,35,265,this.SPRITEIMAGE,this.HEART);
     this.lifeThree = new StaticObject(30,30,65,265,this.SPRITEIMAGE,this.HEART);
 
-
+    this.LifeArray = [this.lifeOne,this.lifeTwo,this.lifeThree];
     //Win Animation Characters
     this.enemyOne = new StaticObject(36,36,680,150,this.SPRITEIMAGE,this.ENEMY);
     this.enemyTwo = new StaticObject(36,36,720,200,this.SPRITEIMAGE,this.ENEMY);
@@ -135,7 +137,6 @@ mainGame.prototype =
             if(MainGame.IsPause === false && MainGame.IsOver === false)
             {
                 MainGame.clear();
-                // console.log("Lives "+MainGame.Lives)
                 MainGame.checkEndConditions();
                 MainGame.backgroundManager();
                 MainGame.characterManager();
@@ -144,7 +145,6 @@ mainGame.prototype =
                 // MainGame.nukeManager();
                 // MainGame.heartManager();
                 MainGame.HUDmanager();
-                console.log("Lives "+MainGame.Lives)
             }
             if(!MainGame.IsOver)
             {
@@ -152,10 +152,13 @@ mainGame.prototype =
             }
             else
             {
+                console.log("In End Game")
                 clearInterval(MainGame.IntervalID);
                 cancelAnimationFrame(MainGame.id);
                 MainGame.saveScore();
                 MainGame.HasStarted = false;
+                MainGame.RESTARTTOAST.style.display = "block";
+                MainGame.RESTARTTOAST.style.opacity = 1;
                 MainGame.GameOverMenu();
             }
         },
@@ -183,14 +186,9 @@ mainGame.prototype =
             MainGame.endAnimation();
             MainGame.endMenuText();
 
-            if(!MainGame.HasStarted)
+            if(MainGame.HasStarted === false)
             {
-                requestAnimationFrame(MainGame.GameOverMenu)
-            }
-            else
-            {
-                // MainGame.reset();
-                MainGame.GameUpdateLoop();
+                MainGame.EndAnimID = requestAnimationFrame(MainGame.GameOverMenu)
             }
         },
 
@@ -258,6 +256,7 @@ mainGame.prototype =
           if(MainGame.Lives < 0)
           {
               MainGame.IsOver = true;
+              console.log("Lives");
           }
         },
         //Author: Tomas
@@ -299,6 +298,7 @@ mainGame.prototype =
           if((MainGame.TestCharacter.y <= -30)|| (MainGame.TestCharacter.y >= 300))
           {
               MainGame.IsOver = true;
+              console.log("Top Bottom")
           }
         },
 
@@ -312,8 +312,9 @@ mainGame.prototype =
         //Author: Tomas
         startGame: function()
         {
+            console.log("In start");
             MainGame.HasStarted = true;
-            MainGame.addLivesToArray();
+            // MainGame.addLivesToArray();
             MainGame.setHighScoreOnStart();
             MainGame.IntervalID = setInterval(MainGame.difficultyManager,5000);
             MainGame.GameUpdateLoop();
@@ -564,6 +565,17 @@ mainGame.prototype =
             }
         },
 
+        restartGame: function()
+        {
+            MainGame.COUNTER = 0;
+            MainGame.WAVES = 0;
+            MainGame.EnemyArray = [];
+            MainGame.lives = true;
+            MainGame.HasStarted = true;
+            MainGame.IsOver = false;
+            MainGame.TestCharacter = new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);;
+            cancelAnimationFrame(MainGame.EndAnimID);
+        },
 
         setHighScoreOnStart: function()
         {
@@ -613,7 +625,7 @@ mainGame.prototype =
             MainGame.ctx.font = "25px Arial";
             MainGame.ctx.fillText("High Score : " +MainGame.HIGH_SCORE,260,    100);
             MainGame.ctx.fillText("Your Score : " +MainGame.SCORE,260,    135);
-            MainGame.ctx.fillText("You survived "+ MainGame.WAVES + " : Waves",              210,    180);
+            MainGame.ctx.fillText("You survived : "+ MainGame.WAVES + " Waves",              210,    180);
             MainGame.ctx.restore();
 
         },
@@ -719,10 +731,18 @@ mainGame.prototype =
 
             MainGame.STARTCONTROLLINK.addEventListener('click', function()
             {
-                MainGame.startGame();
                 MainGame.HasStarted = true;
                 MainGame.CONTROLTOAST.style.display = "none";
                 MainGame.CONTROLTOAST.style.opacity = 0;
+            });
+            MainGame.RESTARTLINK.addEventListener('click', function()
+            {
+                MainGame.restartGame();
+                console.log("FUCK ");
+                MainGame.RESTARTTOAST.style.display = "none";
+                MainGame.RESTARTTOAST.style.opacity = 0;
+                MainGame.startGame();
+
             });
         },
 
@@ -858,6 +878,11 @@ if(MainGame.mobile)
 {
     MainGame.AddTouchEventControllers();
     MainGame.AddMenuOptions();
+    window.onload = function()
+    {
+        MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X, MainGame.BG_SPRITE_Y,
+            MainGame.BG_SPRITE_WIDTH, MainGame.BG_SPRITE_HEIGHT, MainGame.BACKGROUND_IMAGE_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT);
+    };
     MainGame.startMobileMenu();
 }
 else
