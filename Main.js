@@ -11,6 +11,8 @@ var mainGame = function()
     this.id = 0;
     this.IntervalID = 0;
     this.EndAnimID = 0;
+    this.NukeID = 0;
+    this.HeartID = 0;
 
     //Counts
     this.COUNTER = 0;
@@ -34,6 +36,7 @@ var mainGame = function()
     this.HeartArray = [];
     this.NukeArray = [];
     this.NUKE_SPEED = -1;
+    this.HEART_SPEED = -1;
 
     //Sprite Sheet
     this.SPRITEIMAGE = new Image();
@@ -142,8 +145,8 @@ mainGame.prototype =
                 MainGame.characterManager();
                 MainGame.enemyManager();
                 MainGame.bulletManager();
-                // MainGame.nukeManager();
-                // MainGame.heartManager();
+                MainGame.nukeManager();
+                MainGame.heartManager();
                 MainGame.HUDmanager();
             }
             if(!MainGame.IsOver)
@@ -317,6 +320,8 @@ mainGame.prototype =
             // MainGame.addLivesToArray();
             MainGame.setHighScoreOnStart();
             MainGame.IntervalID = setInterval(MainGame.difficultyManager,5000);
+            MainGame.NukeID = setInterval(MainGame.spawnNuke,15000);
+            MainGame.HeartID = setInterval(MainGame.spawnHeart, 2000);
             MainGame.GameUpdateLoop();
         },
         //Author: Tomas
@@ -463,15 +468,16 @@ mainGame.prototype =
         },
 
         //Author: Nathan
-        spawnNuke: function(number)
+        spawnNuke: function()
         {
-            for(let i = 0; i <= number; i += 1)
-            {
-                var z = Math.floor((Math.random() * 4) + 1);
-                var y = Math.floor((Math.random() * 270) + 1);
+            console.log(MainGame.NukeArray);
 
-                MainGame.NukeArray.push(new StaticObject(47,40,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.NUKE));
-            }
+            var z = Math.floor((Math.random() * 4) + 1);
+
+            var y = Math.floor((Math.random() * 270) + 1);
+
+            MainGame.NukeArray.push(new StaticObject(47,40,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.NUKE));
+
         },
 
         //Author: Nathan
@@ -480,6 +486,7 @@ mainGame.prototype =
             MainGame.renderNuke();
             MainGame.nukeMovementBehaviour();
             MainGame.bulletNukeCollision();
+            MainGame.NukeCollidesWithPlayer();
 
         },
 
@@ -502,6 +509,21 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        NukeCollidesWithPlayer: function()
+        {
+            for(let i = 0; i < MainGame.NukeArray.length; i+=1)
+            {
+                if(MainGame.NukeArray[i].getVisible()) {
+                    if (MainGame.TestCharacter.checkCrash(MainGame.NukeArray[i]))
+                    {
+                        MainGame.Lives -=1;
+                        MainGame.NukeArray[i].setInVisible();
+                    }
+                }
+            }
+        },
+
+        //Author: Nathan
         bulletNukeCollision: function()
         {
             for(let i = 0; i < MainGame.NukeArray.length; i +=1)
@@ -514,7 +536,12 @@ mainGame.prototype =
                         {
                             MainGame.NukeArray[i].setInVisible();
                             MainGame.BulletArray[j].setInVisible();
+                            for(let x = 0; x < MainGame.EnemyArray.length; x += 1)
+                            {
+                                MainGame.EnemyArray[x].setInVisible();
 
+                            }
+                                MainGame.SCORE += 5;
                         }
                     }
                 }
@@ -524,7 +551,6 @@ mainGame.prototype =
         //Author: Nathan
         spawnHeart: function(number)
         {
-            for(let i = 0; i <= number; i += 1)
             {
                 var z = Math.floor((Math.random() * 4) + 1);
                 var y = Math.floor((Math.random() * 270) + 1);
@@ -537,8 +563,17 @@ mainGame.prototype =
         heartManager: function()
         {
             MainGame.renderHeart();
-            MainGame.HeartCollidesWithPlayer;
+            MainGame.HeartCollidesWithPlayer();
+            MainGame.heartMovementBehaviour();
 
+        },
+
+        heartMovementBehaviour: function()
+        {
+            for(let i = 0; i < MainGame.HeartArray.length; i +=1)
+            {
+                MainGame.HeartArray[i].updatePositionX(MainGame.HEART_SPEED);
+            }
         },
 
         //Author: Nathan
@@ -558,7 +593,11 @@ mainGame.prototype =
                 if(MainGame.HeartArray[i].getVisible()) {
                     if (MainGame.TestCharacter.checkCrash(MainGame.HeartArray[i]))
                     {
-                        //add life to player
+                        if(MainGame.Lives < 2)
+                        {
+                            MainGame.Lives +=1;
+                        }
+
                         MainGame.HeartArray[i].setInVisible();
                     }
                 }
