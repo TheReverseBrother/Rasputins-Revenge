@@ -22,7 +22,7 @@ var mainGame = function()
     this.HIGH_SCORE = 0;
 
     //Const
-    this.ENEMY_SPEED = -1;
+    this.ENEMY_SPEED = -1.5;
     this.STANDARD_DELAY = 5;
     this.CHTR_DELAY = 8;
     this.Lives = 2;
@@ -104,6 +104,7 @@ var mainGame = function()
     this.SHOOTING_SOUND = new Audio("./Sounds/gunshot.wav");
     this.SONG_SOUND = new Audio("./Sounds/Rasputin8Bit.mp3");
     this.SONG_SOUND.loop = true;
+    this.SONG_SOUND.volume = 0.6;
     this.DEATH_SOUND = new Audio("./Sounds/GameOver.wav");
     this.NUKE_SOUND = new Audio("./Sounds/nuke.wav");
 
@@ -151,41 +152,41 @@ mainGame.prototype =
         //Author: Tomas
         GameUpdateLoop : function(now)
         {
-            MainGame.SONG_SOUND.play();
-            // MainGame.refreshLoop();
-            if(MainGame.IsPause === false && MainGame.IsOver === false)
+            Rasputin.SONG_SOUND.play();
+            // Rasputin.refreshLoop();
+            if(Rasputin.IsPause === false && Rasputin.IsOver === false)
             {
-                MainGame.clear();
-                MainGame.checkEndConditions();
-                MainGame.backgroundManager();
-                MainGame.characterManager();
-                MainGame.enemyManager();
-                MainGame.bulletManager();
-                MainGame.nukeManager();
-                MainGame.heartManager();
-                MainGame.explosionManager();
-                MainGame.HUDmanager();
+                Rasputin.clear();
+                Rasputin.checkEndConditions();
+                Rasputin.backgroundManager();
+                Rasputin.characterManager();
+                Rasputin.enemyManager();
+                Rasputin.bulletManager();
+                Rasputin.nukeManager();
+                Rasputin.heartManager();
+                Rasputin.explosionManager();
+                Rasputin.HUDmanager();
             }
-            if(!MainGame.IsOver)
+            if(!Rasputin.IsOver)
             {
-                MainGame.id = requestAnimationFrame(MainGame.GameUpdateLoop);
+                Rasputin.id = requestAnimationFrame(Rasputin.GameUpdateLoop);
             }
             else
             {
                 console.log("In End Game")
-                clearInterval(MainGame.IntervalID);
-                clearInterval(MainGame.NukeID);
-                clearInterval(MainGame.HeartID);
-                cancelAnimationFrame(MainGame.id);
-                MainGame.saveScore();
-                MainGame.HasStarted = false;
-                if(MainGame.mobile)
+                clearInterval(Rasputin.IntervalID);
+                clearInterval(Rasputin.NukeID);
+                clearInterval(Rasputin.HeartID);
+                cancelAnimationFrame(Rasputin.id);
+                Rasputin.saveScore();
+                Rasputin.HasStarted = false;
+                if(Rasputin.mobile)
                 {
-                    MainGame.RESTARTTOAST.style.display = "block";
-                    MainGame.RESTARTTOAST.style.opacity = 1;
+                    Rasputin.RESTARTTOAST.style.display = "block";
+                    Rasputin.RESTARTTOAST.style.opacity = 1;
                 }
 
-                MainGame.GameOverMenu();
+                Rasputin.GameOverMenu();
             }
         },
 
@@ -200,71 +201,71 @@ mainGame.prototype =
 
         addLivesToArray: function()
         {
-            MainGame.LifeArray.push(MainGame.lifeOne);
-            MainGame.LifeArray.push(MainGame.lifeTwo);
-            MainGame.LifeArray.push(MainGame.lifeThree);
+            Rasputin.LifeArray.push(Rasputin.lifeOne);
+            Rasputin.LifeArray.push(Rasputin.lifeTwo);
+            Rasputin.LifeArray.push(Rasputin.lifeThree);
         },
 
         GameOverMenu: function()
         {
-            MainGame.clear();
-            MainGame.backgroundManager();
-            MainGame.endAnimation();
-            MainGame.endMenuText();
-            MainGame.SONG_SOUND.pause();
-            if(MainGame.HasStarted === false)
+            Rasputin.clear();
+            Rasputin.backgroundManager();
+            Rasputin.endAnimation();
+            Rasputin.endMenuText();
+            Rasputin.SONG_SOUND.pause();
+            if(Rasputin.HasStarted === false)
             {
-                MainGame.EndAnimID = requestAnimationFrame(MainGame.GameOverMenu)
+                Rasputin.EndAnimID = requestAnimationFrame(Rasputin.GameOverMenu)
             }
         },
 
         HUDmanager: function()
         {
-          MainGame.drawLives();
-          MainGame.drawScore();
-          MainGame.drawHiScore();
+          Rasputin.drawLives();
+          Rasputin.drawScore();
+          Rasputin.drawHiScore();
         },
 
         drawLives: function()
         {
-            for(let i = 0; i <= MainGame.Lives; i ++)
+            for(let i = 0; i <= Rasputin.Lives; i ++)
             {
-                MainGame.LifeArray[i].Draw(MainGame.ctx);
+                Rasputin.LifeArray[i].Draw(Rasputin.ctx);
             }
         },
 
         drawScore: function()
         {
-            MainGame.ctx.save();
+            Rasputin.ctx.save();
 
-            let string = "Score : "+ MainGame.SCORE;
-            MainGame.ctx.font = "20px Arial";
-            MainGame.ctx.fillStyle = "Black";
-            MainGame.ctx.fillText(string,580,25);
+            let string = "Score : "+ Rasputin.SCORE;
+            Rasputin.ctx.font = "20px Arial";
+            Rasputin.ctx.fillStyle = "Black";
+            Rasputin.ctx.fillText(string,580,25);
 
         },
 
         drawHiScore: function()
         {
-            if(MainGame.SCORE > MainGame.HIGH_SCORE)
+            if(Rasputin.SCORE > Rasputin.HIGH_SCORE)
             {
-                MainGame.HIGH_SCORE = MainGame.SCORE;
+                Rasputin.HIGH_SCORE = Rasputin.SCORE;
             }
-            let string = "HiScore : "+ MainGame.HIGH_SCORE;
+            let string = "HiScore : "+ Rasputin.HIGH_SCORE;
 
-            MainGame.ctx.fillText(string,560,285);
+            Rasputin.ctx.fillText(string,560,285);
 
-            MainGame.ctx.restore();
+            Rasputin.ctx.restore();
         },
 
         explosionManager: function()
         {
-            for(let i = 0; i < MainGame.ExplosionArray.length; i +=1)
+            for(let i = 0; i < Rasputin.ExplosionArray.length; i +=1)
             {
-                MainGame.ExplosionArray[i].render(MainGame.ctx);
-                if(MainGame.ExplosionArray[i].cellIndex === 0)
+                Rasputin.ExplosionArray[i].render(Rasputin.ctx);
+                if(Rasputin.ExplosionArray[i].cellIndex === 0)
                 {
-                    MainGame.ExplosionArray[i].setInVisible();
+                    Rasputin.ExplosionArray[i].setInVisible();
                 }
 
             }
@@ -272,44 +273,45 @@ mainGame.prototype =
         //Author: Tomas
         pause: function()
         {
-            if(MainGame.IsPause === false )
+            if(Rasputin.IsPause === false )
             {
-                MainGame.IsPause = true;
+                Rasputin.IsPause = true;
             }
-            else if(MainGame.IsPause === true)
+            else if(Rasputin.IsPause === true)
             {
-                MainGame.IsPause = false;
+                Rasputin.SONG_SOUND.pause();
+                Rasputin.IsPause = false;
             }
         },
 
         //Author: Tomas
         checkEndConditions: function()
         {
-          MainGame.EnemyReachesEnd();
-          MainGame.EnemyCollidesWithPlayer();
-          MainGame.playerHitsBottomOrTop();
-          MainGame.CheckLives();
+          Rasputin.EnemyReachesEnd();
+          Rasputin.EnemyCollidesWithPlayer();
+          Rasputin.playerHitsBottomOrTop();
+          Rasputin.CheckLives();
         },
         CheckLives: function()
         {
-          if(MainGame.Lives < 0)
+          if(Rasputin.Lives < 0)
           {
-              MainGame.IsOver = true;
+              Rasputin.IsOver = true;
               console.log("Lives");
-              MainGame.playSound(MainGame.DEATH_SOUND);
+              Rasputin.playSound(Rasputin.DEATH_SOUND);
           }
         },
         //Author: Tomas
         EnemyReachesEnd: function()
         {
-            for(let i = 0; i < MainGame.EnemyArray.length; i+=1)
+            for(let i = 0; i < Rasputin.EnemyArray.length; i+=1)
             {
-                if(MainGame.EnemyArray[i].getVisible())
+                if(Rasputin.EnemyArray[i].getVisible())
                 {
-                    if(MainGame.EnemyArray[i].x === - MainGame.EnemyArray[i].width)
+                    if(Rasputin.EnemyArray[i].x === - Rasputin.EnemyArray[i].width)
                     {
-                        MainGame.Lives -=1;
-                        MainGame.EnemyArray[i].setInVisible();
+                        Rasputin.Lives -=1;
+                        Rasputin.EnemyArray[i].setInVisible();
                     }
                 }
             }
@@ -318,15 +320,15 @@ mainGame.prototype =
         //Author: Tomas
         EnemyCollidesWithPlayer: function()
         {
-            for(let i = 0; i < MainGame.EnemyArray.length; i+=1)
+            for(let i = 0; i < Rasputin.EnemyArray.length; i+=1)
             {
-                if(MainGame.EnemyArray[i].getVisible()) {
-                    if (MainGame.TestCharacter.checkCrash(MainGame.EnemyArray[i]))
+                if(Rasputin.EnemyArray[i].getVisible()) {
+                    if (Rasputin.TestCharacter.checkCrash(Rasputin.EnemyArray[i]))
                     {
-                        // MainGame.IsOver = true;
-                        MainGame.Lives -=1;
-                        // MainGame.TestCharacter.setInVisible();
-                        MainGame.EnemyArray[i].setInVisible();
+                        // Rasputin.IsOver = true;
+                        Rasputin.Lives -=1;
+                        // Rasputin.TestCharacter.setInVisible();
+                        Rasputin.EnemyArray[i].setInVisible();
                     }
                 }
             }
@@ -335,38 +337,38 @@ mainGame.prototype =
         //Author: Tomas
         playerHitsBottomOrTop: function()
         {
-          if((MainGame.TestCharacter.y <= -30)|| (MainGame.TestCharacter.y >= 300))
+          if((Rasputin.TestCharacter.y <= -30)|| (Rasputin.TestCharacter.y >= 300))
           {
-              MainGame.IsOver = true;
+              Rasputin.IsOver = true;
               console.log("Top Bottom")
-              MainGame.playSound(MainGame.DEATH_SOUND);
+              Rasputin.playSound(Rasputin.DEATH_SOUND);
           }
         },
 
         //Author: Tomas
         characterManager: function()
         {
-            MainGame.TestCharacter.gravityBehaviour();
-            MainGame.TestCharacter.render(MainGame.ctx);
+            Rasputin.TestCharacter.gravityBehaviour();
+            Rasputin.TestCharacter.render(Rasputin.ctx);
         },
 
         //Author: Tomas
         startGame: function()
         {
             console.log("In start");
-            MainGame.HasStarted = true;
-            // MainGame.addLivesToArray();
-            MainGame.setHighScoreOnStart();
-            MainGame.IntervalID = setInterval(MainGame.difficultyManager,5000);
-            MainGame.NukeID = setInterval(MainGame.spawnNuke,30000);
-            MainGame.HeartID = setInterval(MainGame.spawnHeart, 20000);
-            // MainGame.BGMID = setInterval(MainGame.playBackGroundMusic, 244000);
-            MainGame.GameUpdateLoop();
+            Rasputin.HasStarted = true;
+            // Rasputin.addLivesToArray();
+            Rasputin.setHighScoreOnStart();
+            Rasputin.IntervalID = setInterval(Rasputin.difficultyManager,5000);
+            Rasputin.NukeID = setInterval(Rasputin.spawnNuke,30000);
+            Rasputin.HeartID = setInterval(Rasputin.spawnHeart, 20000);
+            // Rasputin.BGMID = setInterval(Rasputin.playBackGroundMusic, 244000);
+            Rasputin.GameUpdateLoop();
         },
 
         playBackGroundMusic: function()
         {
-            let i = MainGame.SONG_SOUND.play();
+            let i = Rasputin.SONG_SOUND.play();
         },
 
 
@@ -374,23 +376,23 @@ mainGame.prototype =
         difficultyManager: function()
         {
             console.log("WELLL");
-            console.log(MainGame.COUNTER);
-            if(MainGame.HasStarted)
+            console.log(Rasputin.COUNTER);
+            if(Rasputin.HasStarted)
             {
-                if(!MainGame.IsPause && MainGame.COUNTER === 0)
+                if(!Rasputin.IsPause && Rasputin.COUNTER === 0)
                 {
                     console.log("in here");
-                    MainGame.spawnEnemy(1);
+                    Rasputin.spawnEnemy(1);
                 }
                 else
                 {
-                    var z = Math.floor((Math.random() * MainGame.COUNTER) + 1);
-                    MainGame.spawnEnemy(z);
+                    var z = Math.floor((Math.random() * Rasputin.COUNTER) + 1);
+                    Rasputin.spawnEnemy(z);
                 }
-                if((MainGame.WAVES % 12) === 0)
+                if((Rasputin.WAVES % 12) === 0)
                 {
-                    MainGame.ENEMY_SPEED -= 1;
-                    MainGame.COUNTER = MainGame.COUNTER/2;
+                    Rasputin.ENEMY_SPEED -= 1;
+                    Rasputin.COUNTER = Rasputin.COUNTER/2;
                 }
             }
         },
@@ -398,90 +400,90 @@ mainGame.prototype =
         //Author: Tomas
         spawnEnemy: function(number)
         {
-            MainGame.COUNTER += 1;
+            Rasputin.COUNTER += 1;
             for(let i = 0; i <= number; i += 1)
             {
                 var z = Math.floor((Math.random() * 4) + 1);
                 var y = Math.floor((Math.random() * 270) + 1);
 
-                MainGame.EnemyArray.push(new StaticObject(36,36,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.ENEMY));
+                Rasputin.EnemyArray.push(new StaticObject(36,36,Rasputin.PositionArray[z],y,Rasputin.SPRITEIMAGE,Rasputin.ENEMY));
             }
-            MainGame.WAVES +=1
+            Rasputin.WAVES +=1
         },
 
         //Author: Tomas
         enemyManager: function()
         {
-            MainGame.enemyMovementBehaviour();
-            MainGame.renderEnemies();
+            Rasputin.enemyMovementBehaviour();
+            Rasputin.renderEnemies();
 
         },
 
         //Author: Tomas
         renderEnemies: function()
         {
-            for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
+            for(let i = 0; i < Rasputin.EnemyArray.length; i +=1)
             {
-                MainGame.EnemyArray[i].Draw(MainGame.ctx);
+                Rasputin.EnemyArray[i].Draw(Rasputin.ctx);
             }
         },
 
         //Author: Tomas
         enemyMovementBehaviour: function()
         {
-            for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
+            for(let i = 0; i < Rasputin.EnemyArray.length; i +=1)
             {
-                MainGame.EnemyArray[i].updatePositionX(MainGame.ENEMY_SPEED);
+                Rasputin.EnemyArray[i].updatePositionX(Rasputin.ENEMY_SPEED);
             }
         },
 
         //Author: Tomas
         backgroundManager: function()
         {
-            MainGame.BACKGROUND_IMAGE_OFFSET += -0.5;
-            MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET += -0.5;
-            MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X,
-                MainGame.BG_SPRITE_Y,MainGame.BG_SPRITE_WIDTH,MainGame.BG_SPRITE_HEIGHT,
-                MainGame.BACKGROUND_IMAGE_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT
+            Rasputin.BACKGROUND_IMAGE_OFFSET += -0.5;
+            Rasputin.BACKGROUND_IMAGE_OFFSCREEN_OFFSET += -0.5;
+            Rasputin.ctx.drawImage(Rasputin.SPRITEIMAGE,Rasputin.BG_SPRITE_X,
+                Rasputin.BG_SPRITE_Y,Rasputin.BG_SPRITE_WIDTH,Rasputin.BG_SPRITE_HEIGHT,
+                Rasputin.BACKGROUND_IMAGE_OFFSET,0,Rasputin.CANVAS_WIDTH,Rasputin.CANVAS_HEIGHT
             );
-            MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X,
-                MainGame.BG_SPRITE_Y,MainGame.BG_SPRITE_WIDTH,MainGame.BG_SPRITE_HEIGHT,
-                MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT
+            Rasputin.ctx.drawImage(Rasputin.SPRITEIMAGE,Rasputin.BG_SPRITE_X,
+                Rasputin.BG_SPRITE_Y,Rasputin.BG_SPRITE_WIDTH,Rasputin.BG_SPRITE_HEIGHT,
+                Rasputin.BACKGROUND_IMAGE_OFFSCREEN_OFFSET,0,Rasputin.CANVAS_WIDTH,Rasputin.CANVAS_HEIGHT
             );
-            if(MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET === -MainGame.CANVAS_WIDTH)
+            if(Rasputin.BACKGROUND_IMAGE_OFFSCREEN_OFFSET === -Rasputin.CANVAS_WIDTH)
             {
-                MainGame.BACKGROUND_IMAGE_OFFSCREEN_OFFSET = MainGame.CANVAS_WIDTH;
+                Rasputin.BACKGROUND_IMAGE_OFFSCREEN_OFFSET = Rasputin.CANVAS_WIDTH;
             }
-            if(MainGame.BACKGROUND_IMAGE_OFFSET === -MainGame.CANVAS_WIDTH)
+            if(Rasputin.BACKGROUND_IMAGE_OFFSET === -Rasputin.CANVAS_WIDTH)
             {
-                MainGame.BACKGROUND_IMAGE_OFFSET = MainGame.CANVAS_WIDTH;
+                Rasputin.BACKGROUND_IMAGE_OFFSET = Rasputin.CANVAS_WIDTH;
             }
         },
 
         //Author: Tomas
         bulletManager: function()
         {
-            MainGame.renderBullets();
-            MainGame.bulletMovementBehaviour();
-            MainGame.bulletEnemyCollision();
+            Rasputin.renderBullets();
+            Rasputin.bulletMovementBehaviour();
+            Rasputin.bulletEnemyCollision();
         },
 
         //Author: Tomas
         bulletEnemyCollision: function()
         {
-            for(let i = 0; i < MainGame.EnemyArray.length; i +=1)
+            for(let i = 0; i < Rasputin.EnemyArray.length; i +=1)
             {
-                for(let j = 0; j < MainGame.BulletArray.length; j+= 1)
+                for(let j = 0; j < Rasputin.BulletArray.length; j+= 1)
                 {
-                    if(MainGame.EnemyArray[i].getVisible() && MainGame.BulletArray[j].getVisible())
+                    if(Rasputin.EnemyArray[i].getVisible() && Rasputin.BulletArray[j].getVisible())
                     {
-                        if(MainGame.BulletArray[j].checkCrash(MainGame.EnemyArray[i]))
+                        if(Rasputin.BulletArray[j].checkCrash(Rasputin.EnemyArray[i]))
                         {
-                            MainGame.EnemyArray[i].setInVisible();
-                            MainGame.BulletArray[j].setInVisible();
-                            MainGame.ExplosionArray.push(new AnimatedObject(MainGame.EXPLOSIONSPRITES,MainGame.Explosion,
-                                MainGame.EnemyArray[i].x,MainGame.EnemyArray[i].y,40,40,MainGame.STANDARD_DELAY));
-                            MainGame.SCORE += 1;
+                            Rasputin.EnemyArray[i].setInVisible();
+                            Rasputin.BulletArray[j].setInVisible();
+                            Rasputin.ExplosionArray.push(new AnimatedObject(Rasputin.EXPLOSIONSPRITES,Rasputin.Explosion,
+                                Rasputin.EnemyArray[i].x,Rasputin.EnemyArray[i].y,40,40,Rasputin.STANDARD_DELAY));
+                            Rasputin.SCORE += 1;
                         }
                     }
                 }
@@ -491,21 +493,21 @@ mainGame.prototype =
         //Author: Tomas
         renderBullets: function()
         {
-            for(let i = 0; i < MainGame.BulletArray.length; i +=1)
+            for(let i = 0; i < Rasputin.BulletArray.length; i +=1)
             {
-                MainGame.BulletArray[i].Draw(MainGame.ctx);
+                Rasputin.BulletArray[i].Draw(Rasputin.ctx);
             }
         },
 
         //Author: Tomas
         bulletMovementBehaviour: function()
         {
-            for(let i = 0; i < MainGame.BulletArray.length; i +=1)
+            for(let i = 0; i < Rasputin.BulletArray.length; i +=1)
             {
-                MainGame.BulletArray[i].updatePositionX(MainGame.BULLET_SPEED);
-                if(MainGame.BulletArray[i].x > 680)
+                Rasputin.BulletArray[i].updatePositionX(Rasputin.BULLET_SPEED);
+                if(Rasputin.BulletArray[i].x > 680)
                 {
-                    MainGame.BulletArray[i].setInVisible();
+                    Rasputin.BulletArray[i].setInVisible();
                 }
             }
         },
@@ -513,64 +515,64 @@ mainGame.prototype =
         //Author: Tomas
         createBullet: function()
         {
-            let x = MainGame.TestCharacter.x + MainGame.TestCharacter.width;
-            let y = MainGame.TestCharacter.y + 10;
-            MainGame.BulletArray.push(new StaticObject(20,20,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
-            MainGame.playSound(MainGame.SHOOTING_SOUND);
+            let x = Rasputin.TestCharacter.x + Rasputin.TestCharacter.width;
+            let y = Rasputin.TestCharacter.y + 10;
+            Rasputin.BulletArray.push(new StaticObject(20,20,x, y,Rasputin.SPRITEIMAGE, Rasputin.BULLET ));
+            Rasputin.playSound(Rasputin.SHOOTING_SOUND);
 
         },
 
         //Author: Nathan
         spawnNuke: function()
         {
-            console.log(MainGame.NukeArray);
+            console.log(Rasputin.NukeArray);
 
             var z = Math.floor((Math.random() * 4) + 1);
 
             var y = Math.floor((Math.random() * 270) + 1);
 
-            MainGame.NukeArray.push(new StaticObject(47,40,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.NUKE));
+            Rasputin.NukeArray.push(new StaticObject(47,40,Rasputin.PositionArray[z],y,Rasputin.SPRITEIMAGE,Rasputin.NUKE));
 
         },
 
         //Author: Nathan
         nukeManager: function()
         {
-            MainGame.renderNuke();
-            MainGame.nukeMovementBehaviour();
-            MainGame.bulletNukeCollision();
-            MainGame.NukeCollidesWithPlayer();
+            Rasputin.renderNuke();
+            Rasputin.nukeMovementBehaviour();
+            Rasputin.bulletNukeCollision();
+            Rasputin.NukeCollidesWithPlayer();
 
         },
 
         //Author: Nathan
         renderNuke: function()
         {
-            for(let i = 0; i < MainGame.NukeArray.length; i +=1)
+            for(let i = 0; i < Rasputin.NukeArray.length; i +=1)
             {
-                MainGame.NukeArray[i].Draw(MainGame.ctx);
+                Rasputin.NukeArray[i].Draw(Rasputin.ctx);
             }
         },
 
         //Author: Nathan
         nukeMovementBehaviour: function()
         {
-            for(let i = 0; i < MainGame.NukeArray.length; i +=1)
+            for(let i = 0; i < Rasputin.NukeArray.length; i +=1)
             {
-                MainGame.NukeArray[i].updatePositionX(MainGame.NUKE_SPEED);
+                Rasputin.NukeArray[i].updatePositionX(Rasputin.NUKE_SPEED);
             }
         },
 
         //Author: Nathan
         NukeCollidesWithPlayer: function()
         {
-            for(let i = 0; i < MainGame.NukeArray.length; i+=1)
+            for(let i = 0; i < Rasputin.NukeArray.length; i+=1)
             {
-                if(MainGame.NukeArray[i].getVisible()) {
-                    if (MainGame.TestCharacter.checkCrash(MainGame.NukeArray[i]))
+                if(Rasputin.NukeArray[i].getVisible()) {
+                    if (Rasputin.TestCharacter.checkCrash(Rasputin.NukeArray[i]))
                     {
-                        MainGame.Lives -=1;
-                        MainGame.NukeArray[i].setInVisible();
+                        Rasputin.Lives -=1;
+                        Rasputin.NukeArray[i].setInVisible();
                     }
                 }
             }
@@ -579,27 +581,27 @@ mainGame.prototype =
         //Author: Nathan
         bulletNukeCollision: function()
         {
-            for(let i = 0; i < MainGame.NukeArray.length; i +=1)
+            for(let i = 0; i < Rasputin.NukeArray.length; i +=1)
             {
-                for(let j = 0; j < MainGame.BulletArray.length; j+= 1)
+                for(let j = 0; j < Rasputin.BulletArray.length; j+= 1)
                 {
-                    if(MainGame.NukeArray[i].getVisible() && MainGame.BulletArray[j].getVisible())
+                    if(Rasputin.NukeArray[i].getVisible() && Rasputin.BulletArray[j].getVisible())
                     {
-                        if(MainGame.BulletArray[j].checkCrash(MainGame.NukeArray[i]))
+                        if(Rasputin.BulletArray[j].checkCrash(Rasputin.NukeArray[i]))
                         {
-                            MainGame.NukeArray[i].setInVisible();
-                            MainGame.BulletArray[j].setInVisible();
-                            for(let x = 0; x < MainGame.EnemyArray.length; x += 1)
+                            Rasputin.NukeArray[i].setInVisible();
+                            Rasputin.BulletArray[j].setInVisible();
+                            for(let x = 0; x < Rasputin.EnemyArray.length; x += 1)
                             {
-                                if(MainGame.EnemyArray[x].getVisible())
+                                if(Rasputin.EnemyArray[x].getVisible())
                                 {
-                                    MainGame.ExplosionArray.push(new AnimatedObject(MainGame.EXPLOSIONSPRITES,MainGame.Explosion,
-                                        MainGame.EnemyArray[x].x,MainGame.EnemyArray[x].y,30,30,MainGame.STANDARD_DELAY));
-                                    MainGame.EnemyArray[x].setInVisible();
-                                    MainGame.playSound(MainGame.NUKE_SOUND);
+                                    Rasputin.ExplosionArray.push(new AnimatedObject(Rasputin.EXPLOSIONSPRITES,Rasputin.Explosion,
+                                        Rasputin.EnemyArray[x].x,Rasputin.EnemyArray[x].y,30,30,Rasputin.STANDARD_DELAY));
+                                    Rasputin.EnemyArray[x].setInVisible();
+                                    Rasputin.playSound(Rasputin.NUKE_SOUND);
                                 }
                             }
-                                MainGame.SCORE += 5;
+                                Rasputin.SCORE += 5;
                         }
                     }
                 }
@@ -613,50 +615,50 @@ mainGame.prototype =
                 var z = Math.floor((Math.random() * 4) + 1);
                 var y = Math.floor((Math.random() * 270) + 1);
 
-                MainGame.HeartArray.push(new StaticObject(18,19,MainGame.PositionArray[z],y,MainGame.SPRITEIMAGE,MainGame.HEART));
+                Rasputin.HeartArray.push(new StaticObject(18,19,Rasputin.PositionArray[z],y,Rasputin.SPRITEIMAGE,Rasputin.HEART));
             }
         },
 
         //Author: Nathan
         heartManager: function()
         {
-            MainGame.renderHeart();
-            MainGame.HeartCollidesWithPlayer();
-            MainGame.heartMovementBehaviour();
+            Rasputin.renderHeart();
+            Rasputin.HeartCollidesWithPlayer();
+            Rasputin.heartMovementBehaviour();
 
         },
 
         heartMovementBehaviour: function()
         {
-            for(let i = 0; i < MainGame.HeartArray.length; i +=1)
+            for(let i = 0; i < Rasputin.HeartArray.length; i +=1)
             {
-                MainGame.HeartArray[i].updatePositionX(MainGame.HEART_SPEED);
+                Rasputin.HeartArray[i].updatePositionX(Rasputin.HEART_SPEED);
             }
         },
 
         //Author: Nathan
         renderHeart: function()
         {
-            for(let i = 0; i < MainGame.HeartArray.length; i +=1)
+            for(let i = 0; i < Rasputin.HeartArray.length; i +=1)
             {
-                MainGame.HeartArray[i].Draw(MainGame.ctx);
+                Rasputin.HeartArray[i].Draw(Rasputin.ctx);
             }
         },
 
         //Author: Nathan
         HeartCollidesWithPlayer: function()
         {
-            for(let i = 0; i < MainGame.HeartArray.length; i+=1)
+            for(let i = 0; i < Rasputin.HeartArray.length; i+=1)
             {
-                if(MainGame.HeartArray[i].getVisible()) {
-                    if (MainGame.TestCharacter.checkCrash(MainGame.HeartArray[i]))
+                if(Rasputin.HeartArray[i].getVisible()) {
+                    if (Rasputin.TestCharacter.checkCrash(Rasputin.HeartArray[i]))
                     {
-                        if(MainGame.Lives < 2)
+                        if(Rasputin.Lives < 2)
                         {
-                            MainGame.Lives +=1;
+                            Rasputin.Lives +=1;
                         }
 
-                        MainGame.HeartArray[i].setInVisible();
+                        Rasputin.HeartArray[i].setInVisible();
                     }
                 }
             }
@@ -664,20 +666,20 @@ mainGame.prototype =
 
         restartGame: function()
         {
-            MainGame.COUNTER = 0;
-            MainGame.WAVES = 0;
-            MainGame.SCORE = 0;
-            MainGame.BulletArray = [];
-            MainGame.EnemyArray = [];
-            MainGame.ExplosionArray = [];
-            MainGame.NukeArray = [];
-            MainGame.HeartID = [];
-            MainGame.lives = 2;
-            MainGame.lives = true;
-            MainGame.HasStarted = true;
-            MainGame.IsOver = false;
-            MainGame.TestCharacter = new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);;
-            cancelAnimationFrame(MainGame.EndAnimID);
+            Rasputin.COUNTER = 0;
+            Rasputin.WAVES = 0;
+            Rasputin.SCORE = 0;
+            Rasputin.BulletArray = [];
+            Rasputin.EnemyArray = [];
+            Rasputin.ExplosionArray = [];
+            Rasputin.NukeArray = [];
+            Rasputin.HeartID = [];
+            Rasputin.lives = 2;
+            Rasputin.lives = true;
+            Rasputin.HasStarted = true;
+            Rasputin.IsOver = false;
+            Rasputin.TestCharacter = new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);;
+            cancelAnimationFrame(Rasputin.EndAnimID);
         },
 
         setHighScoreOnStart: function()
@@ -686,50 +688,50 @@ mainGame.prototype =
 
             if (cookie === "")
             {
-                MainGame.HIGH_SCORE = 0;
+                Rasputin.HIGH_SCORE = 0;
             }
             else
             {
                 let split = cookie.split("=");
                 let x = split[1];
-                MainGame.HIGH_SCORE = parseInt(x);
+                Rasputin.HIGH_SCORE = parseInt(x);
             }
         },
 
         saveScore: function()
         {
-            document.cookie = "high_SCORE=" +MainGame.HIGH_SCORE;
+            document.cookie = "high_SCORE=" +Rasputin.HIGH_SCORE;
         },
 
 
         endAnimation: function()
         {
-          for(let i = 0 ; i < MainGame.EndAnimationArray.length; i ++)
+          for(let i = 0 ; i < Rasputin.EndAnimationArray.length; i ++)
           {
-              MainGame.EndAnimationArray[i].Draw(MainGame.ctx);
-              MainGame.EndAnimationArray[i].updatePositionX(MainGame.ENEMY_SPEED -2);
-              if(MainGame.EndAnimationArray[i].x < -MainGame.EndAnimationArray[i].width)
+              Rasputin.EndAnimationArray[i].Draw(Rasputin.ctx);
+              Rasputin.EndAnimationArray[i].updatePositionX(Rasputin.ENEMY_SPEED -2);
+              if(Rasputin.EndAnimationArray[i].x < -Rasputin.EndAnimationArray[i].width)
               {
-                  MainGame.EndAnimationArray[i].x = 680;
+                  Rasputin.EndAnimationArray[i].x = 680;
               }
           }
         },
 
         endMenuText: function()
         {
-            MainGame.ctx.save();
-            MainGame.ctx.fillStyle= "white";
-            MainGame.ctx.font = "40px Arial";
-            MainGame.ctx.fillText("Game Over",                  235,    60);
-            MainGame.ctx.restore();
+            Rasputin.ctx.save();
+            Rasputin.ctx.fillStyle= "white";
+            Rasputin.ctx.font = "40px Arial";
+            Rasputin.ctx.fillText("Game Over",                  235,    60);
+            Rasputin.ctx.restore();
 
-            MainGame.ctx.save();
-            MainGame.ctx.fillStyle= "white";
-            MainGame.ctx.font = "25px Arial";
-            MainGame.ctx.fillText("High Score : " +MainGame.HIGH_SCORE,260,    100);
-            MainGame.ctx.fillText("Your Score : " +MainGame.SCORE,260,    135);
-            MainGame.ctx.fillText("You survived : "+ MainGame.WAVES + " Waves",              210,    180);
-            MainGame.ctx.restore();
+            Rasputin.ctx.save();
+            Rasputin.ctx.fillStyle= "white";
+            Rasputin.ctx.font = "25px Arial";
+            Rasputin.ctx.fillText("High Score : " +Rasputin.HIGH_SCORE,260,    100);
+            Rasputin.ctx.fillText("Your Score : " +Rasputin.SCORE,260,    135);
+            Rasputin.ctx.fillText("You survived : "+ Rasputin.WAVES + " Waves",              210,    180);
+            Rasputin.ctx.restore();
 
         },
 
@@ -741,7 +743,7 @@ mainGame.prototype =
         //Tomas
         detectMobile: function()
         {
-            MainGame.mobile = 'ontouchstart' in window;
+            Rasputin.mobile = 'ontouchstart' in window;
         },
 
         getViewportSize: function () {
@@ -787,19 +789,19 @@ mainGame.prototype =
         },
 
         fitScreen: function () {
-            var arenaSize = MainGame.calculateArenaSize(
-                MainGame.getViewportSize());
+            var arenaSize = Rasputin.calculateArenaSize(
+                Rasputin.getViewportSize());
 
-            MainGame.resizeElementsToFitScreen(arenaSize.width,
+            Rasputin.resizeElementsToFitScreen(arenaSize.width,
                 arenaSize.height);
         },
 
         resizeElementsToFitScreen: function (arenaWidth, arenaHeight) {
-            MainGame.resizeElement(
+            Rasputin.resizeElement(
                 document.getElementById('main-canvas'), arenaWidth, arenaHeight);
 
-            MainGame.resizeElement(document.getElementById('mobileWelcomeToast'),arenaWidth,arenaHeight);
-            MainGame.resizeElement(document.getElementById('controlToast'),arenaWidth,arenaHeight);
+            Rasputin.resizeElement(document.getElementById('mobileWelcomeToast'),arenaWidth,arenaHeight);
+            Rasputin.resizeElement(document.getElementById('controlToast'),arenaWidth,arenaHeight);
 
         },
 
@@ -810,46 +812,46 @@ mainGame.prototype =
 
         startMobileMenu: function()
         {
-            MainGame.STARTTOAST.style.display = "block";
-            MainGame.STARTTOAST.style.opacity = 1;
+            Rasputin.STARTTOAST.style.display = "block";
+            Rasputin.STARTTOAST.style.opacity = 1;
         },
 
 
         AddMenuOptions: function()
         {
-            MainGame.STARTLINK.addEventListener('click',function(e)
+            Rasputin.STARTLINK.addEventListener('click',function(e)
             {
-                MainGame.HasStarted = true;
-                MainGame.startGame();
-                MainGame.STARTTOAST.style.display = "none";
-                MainGame.STARTTOAST.style.opacity = 0;
-                MainGame.CONTROLTOAST.style.display = "none";
-                MainGame.CONTROLTOAST.style.opacity = 0;
+                Rasputin.HasStarted = true;
+                Rasputin.startGame();
+                Rasputin.STARTTOAST.style.display = "none";
+                Rasputin.STARTTOAST.style.opacity = 0;
+                Rasputin.CONTROLTOAST.style.display = "none";
+                Rasputin.CONTROLTOAST.style.opacity = 0;
             });
 
-            MainGame.CONTROLLINK.addEventListener('click',function()
+            Rasputin.CONTROLLINK.addEventListener('click',function()
             {
-                MainGame.drawMobileInstructions();
-                MainGame.controlMenu = true;
-                MainGame.STARTTOAST.style.display = "none";
-                MainGame.STARTTOAST.style.opacity = 0;
-                MainGame.CONTROLTOAST.style.display = "block";
-                MainGame.CONTROLTOAST.style.opacity = 1;
+                Rasputin.drawMobileInstructions();
+                Rasputin.controlMenu = true;
+                Rasputin.STARTTOAST.style.display = "none";
+                Rasputin.STARTTOAST.style.opacity = 0;
+                Rasputin.CONTROLTOAST.style.display = "block";
+                Rasputin.CONTROLTOAST.style.opacity = 1;
             });
 
-            MainGame.STARTCONTROLLINK.addEventListener('click', function()
+            Rasputin.STARTCONTROLLINK.addEventListener('click', function()
             {
-                MainGame.HasStarted = true;
-                MainGame.CONTROLTOAST.style.display = "none";
-                MainGame.CONTROLTOAST.style.opacity = 0;
+                Rasputin.HasStarted = true;
+                Rasputin.CONTROLTOAST.style.display = "none";
+                Rasputin.CONTROLTOAST.style.opacity = 0;
             });
-            MainGame.RESTARTLINK.addEventListener('click', function()
+            Rasputin.RESTARTLINK.addEventListener('click', function()
             {
-                MainGame.restartGame();
+                Rasputin.restartGame();
                 console.log("FUCK ");
-                MainGame.RESTARTTOAST.style.display = "none";
-                MainGame.RESTARTTOAST.style.opacity = 0;
-                MainGame.startGame();
+                Rasputin.RESTARTTOAST.style.display = "none";
+                Rasputin.RESTARTTOAST.style.opacity = 0;
+                Rasputin.startGame();
 
             });
         },
@@ -858,23 +860,29 @@ mainGame.prototype =
         AddTouchEventControllers: function()
         {
             console.log("HEY");
-            MainGame.canvas.addEventListener('touchstart',MainGame.touchStart);
-            MainGame.canvas.addEventListener('touchend',MainGame.touchEnd);
-            MainGame.canvas.addEventListener('touchmove',MainGame.touchPause)
+            Rasputin.canvas.addEventListener('touchstart',Rasputin.touchStart);
+            Rasputin.canvas.addEventListener('touchend',Rasputin.touchEnd);
+            Rasputin.canvas.addEventListener('touchmove',Rasputin.touchPause)
         },
 
         //Tomas
         touchStart: function(e)
         {
             var x = e.changedTouches[0].pageX;
-            if( x < MainGame.canvas.width/2)
+            if( x < Rasputin.canvas.width/2)
             {
-                MainGame.jetPack(-0.2);
+                if(!Rasputin.IsPause && !Rasputin.IsOver)
+                {
+                    Rasputin.jetPack(-0.2);
+                }
             }
             else
             {
                 // Shooting Function
-                MainGame.createBullet();
+                if(!Rasputin.IsOver && !Rasputin.IsPause)
+                {
+                    Rasputin.createBullet();
+                }
             }
 
             e.preventDefault();
@@ -884,20 +892,22 @@ mainGame.prototype =
         touchEnd: function(e)
         {
             var x = e.changedTouches[0].pageX;
-            if( x < MainGame.canvas.width/2)
+            if( x < Rasputin.canvas.width/2)
             {
-                MainGame.jetPack(0.1);
+                if(!Rasputin.IsPause && !Rasputin.IsOver)
+                {
+                    Rasputin.jetPack(0.1);
+                }
             }
-
             e.preventDefault();
         },
 
         touchPause: function(e)
         {
             var x = e.changedTouches[0].pageX;
-            if( x > MainGame.canvas.width/2)
+            if( x > Rasputin.canvas.width/2)
             {
-                MainGame.pause();
+                // Rasputin.pause();
             }
 
             e.preventDefault();
@@ -906,7 +916,7 @@ mainGame.prototype =
         //Tomas
         jetPack: function(g)
         {
-            MainGame.TestCharacter.gravity = g
+            Rasputin.TestCharacter.gravity = g
         },
 
         drawMobileInstructions: function () {
@@ -915,44 +925,44 @@ mainGame.prototype =
                 TOP_LINE_OFFSET = 115,
                 LINE_HEIGHT = 40;
 
-            MainGame.ctx.save();
+            Rasputin.ctx.save();
 
-            MainGame.initializeContextForMobileInstructions();
+            Rasputin.initializeContextForMobileInstructions();
 
-            MainGame.drawMobileDivider(cw, ch);
+            Rasputin.drawMobileDivider(cw, ch);
 
-            MainGame.drawControls();
+            Rasputin.drawControls();
 
-            MainGame.ctx.restore();
+            Rasputin.ctx.restore();
         },
 
         drawMobileDivider: function (cw, ch) {
-            MainGame.ctx.beginPath();
-            MainGame.ctx.moveTo(cw/2, 0);
-            MainGame.ctx.lineTo(cw/2, ch);
-            MainGame.ctx.stroke();
+            Rasputin.ctx.beginPath();
+            Rasputin.ctx.moveTo(cw/2, 0);
+            Rasputin.ctx.lineTo(cw/2, ch);
+            Rasputin.ctx.stroke();
         },
 
         initializeContextForMobileInstructions: function () {
-            MainGame.ctx.textAlign = 'center';
-            MainGame.ctx.textBaseline = 'middle';
+            Rasputin.ctx.textAlign = 'center';
+            Rasputin.ctx.textBaseline = 'middle';
 
-            MainGame.ctx.font = '20px fantasy';
+            Rasputin.ctx.font = '20px fantasy';
 
-            MainGame.ctx.shadowBlur = 2;
-            MainGame.ctx.shadowOffsetX = 2;
-            MainGame.ctx.shadowOffsetY = 2;
-            MainGame.ctx.shadowColor = 'rgb(0,0,0)';
+            Rasputin.ctx.shadowBlur = 2;
+            Rasputin.ctx.shadowOffsetX = 2;
+            Rasputin.ctx.shadowOffsetY = 2;
+            Rasputin.ctx.shadowColor = 'rgb(0,0,0)';
 
-            MainGame.ctx.fillStyle = 'yellow';
-            MainGame.ctx.strokeStyle = 'yellow';
+            Rasputin.ctx.fillStyle = 'yellow';
+            Rasputin.ctx.strokeStyle = 'yellow';
         },
 
         drawControls : function()
         {
-            MainGame.ctx.fillText('Tap This side to keep Player up', 150, 30);
-            MainGame.ctx.fillText('Tap This side to Shoot', 500, 30);
-            MainGame.ctx.fillText('Swipe this side to pause', 500, 260);
+            Rasputin.ctx.fillText('Tap This side to keep Player up', 150, 30);
+            Rasputin.ctx.fillText('Tap This side to Shoot', 500, 30);
+            Rasputin.ctx.fillText('Swipe this side to pause', 500, 260);
         }
     };
 //Tomas
@@ -960,7 +970,10 @@ addEventListener('keyup', function (e) {
     var key = e.keyCode;
     if(key === 32)
     {
-        MainGame.jetPack(0.1);
+        if(!Rasputin.IsOver && !Rasputin.IsPause)
+        {
+            Rasputin.jetPack(0.1);
+        }
     }
 })
 //Tomas
@@ -969,34 +982,45 @@ window.addEventListener('keydown', function(e){
 
     if(key === 32)
     {
-        MainGame.jetPack(-0.2);
-        // MainGame.createBullet();
+        if(!Rasputin.IsOver && !Rasputin.IsPause)
+        {
+            Rasputin.jetPack(-0.2);
+
+        }
+        // Rasputin.createBullet();
     }
     if(key === 39)
     {
-        MainGame.createBullet();
+        if(!Rasputin.IsOver && !Rasputin.IsPause)
+        {
+            Rasputin.createBullet();
+        }
+    }
+    if(key === 80)
+    {
+        Rasputin.pause();
     }
 });
 
 //Tomas
-var MainGame = new mainGame();
-MainGame.detectMobile();
+var Rasputin = new mainGame();
+Rasputin.detectMobile();
 //Tomas
-if(MainGame.mobile)
+if(Rasputin.mobile)
 {
-    MainGame.AddTouchEventControllers();
-    MainGame.AddMenuOptions();
+    Rasputin.AddTouchEventControllers();
+    Rasputin.AddMenuOptions();
     window.onload = function()
     {
-        MainGame.ctx.drawImage(MainGame.SPRITEIMAGE,MainGame.BG_SPRITE_X, MainGame.BG_SPRITE_Y,
-            MainGame.BG_SPRITE_WIDTH, MainGame.BG_SPRITE_HEIGHT, MainGame.BACKGROUND_IMAGE_OFFSET,0,MainGame.CANVAS_WIDTH,MainGame.CANVAS_HEIGHT);
+        Rasputin.ctx.drawImage(Rasputin.SPRITEIMAGE,Rasputin.BG_SPRITE_X, Rasputin.BG_SPRITE_Y,
+            Rasputin.BG_SPRITE_WIDTH, Rasputin.BG_SPRITE_HEIGHT, Rasputin.BACKGROUND_IMAGE_OFFSET,0,Rasputin.CANVAS_WIDTH,Rasputin.CANVAS_HEIGHT);
     };
-    MainGame.startMobileMenu();
+    Rasputin.startMobileMenu();
 }
 else
 {
-    MainGame.startGame();
+    Rasputin.startGame();
 }
-// window.addEventListener("resize", MainGame.fitScreen);
-window.addEventListener("orientationchange", MainGame.fitScreen);
+// window.addEventListener("resize", Rasputin.fitScreen);
+window.addEventListener("orientationchange", Rasputin.fitScreen);
 
