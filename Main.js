@@ -1043,6 +1043,13 @@ window.addEventListener('keydown', function(e){
     {
         Rasputin.pause();
     }
+    if(key === 83)
+    {
+        if(!Rasputin.HasStarted)
+        {
+            Rasputin.startGame();
+        }
+    }
 });
 
 //Tomas
@@ -1062,7 +1069,22 @@ if(Rasputin.mobile)
 }
 else
 {
-    Rasputin.startGame();
+    window.onload = function() {
+        Rasputin.ctx.drawImage(Rasputin.SPRITEIMAGE, Rasputin.BG_SPRITE_X, Rasputin.BG_SPRITE_Y,
+            Rasputin.BG_SPRITE_WIDTH, Rasputin.BG_SPRITE_HEIGHT, Rasputin.BACKGROUND_IMAGE_OFFSET, 0, Rasputin.CANVAS_WIDTH, Rasputin.CANVAS_HEIGHT);
+        Rasputin.ctx.save()
+        Rasputin.ctx.fillStyle = "white";
+        Rasputin.ctx.font = "40px Arial";
+        Rasputin.ctx.fillText("Rasputins Revenge", 180, 60);
+        Rasputin.ctx.restore();
+
+        Rasputin.ctx.save();
+        Rasputin.ctx.fillStyle = "white";
+        Rasputin.ctx.font = "25px Arial";
+        Rasputin.ctx.fillText("Press S to start", 260, 100);
+        Rasputin.ctx.restore();
+    };
+    // Rasputin.startGame();
 }
 // window.addEventListener("resize", Rasputin.fitScreen);
 window.addEventListener("orientationchange", Rasputin.fitScreen);
