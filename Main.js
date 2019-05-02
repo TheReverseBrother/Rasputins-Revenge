@@ -150,7 +150,11 @@ var mainGame = function()
 mainGame.prototype =
     {
         //Author: Tomas
-        GameUpdateLoop : function(now)
+        /**
+         * This Loop Is continously executed and controlls the main game all objects on screen and logic are managed through multiple managers in this loop
+         * Each Manager is responsible for the behaviours of the objects the drawing of the objects and thecollision of the objects
+         */
+        GameUpdateLoop : function()
         {
             Rasputin.SONG_SOUND.play();
             // Rasputin.refreshLoop();
@@ -173,7 +177,6 @@ mainGame.prototype =
             }
             else
             {
-                console.log("In End Game")
                 clearInterval(Rasputin.IntervalID);
                 clearInterval(Rasputin.NukeID);
                 clearInterval(Rasputin.HeartID);
@@ -191,21 +194,17 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This function clears the canvas for  the next frame to be drawn
+         */
         clear : function(){
             this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         },
 
-        addAnimations: function()
-        {
-        },
-
-        addLivesToArray: function()
-        {
-            Rasputin.LifeArray.push(Rasputin.lifeOne);
-            Rasputin.LifeArray.push(Rasputin.lifeTwo);
-            Rasputin.LifeArray.push(Rasputin.lifeThree);
-        },
-
+        //Author: Tomas
+        /**
+         *  This is the menu that controls the Game Over animation and menu Responsible for managing the background the End Condition Animation and the Menu
+         */
         GameOverMenu: function()
         {
             Rasputin.clear();
@@ -219,6 +218,10 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
+        /**
+         *One Of the Many manager Classes this one is responsible for the HUD is draws the lives the score and the high score
+         */
         HUDmanager: function()
         {
           Rasputin.drawLives();
@@ -226,6 +229,10 @@ mainGame.prototype =
           Rasputin.drawHiScore();
         },
 
+        //Author: Tomas
+        /**
+         * This draws the 3 lives in  the bottom left hand corner it only draws the amount in realtion to how many lives the player has
+         */
         drawLives: function()
         {
             for(let i = 0; i <= Rasputin.Lives; i ++)
@@ -234,6 +241,10 @@ mainGame.prototype =
             }
         },
 
+        //Author: Tomas
+        /**
+         * This draws the score in the HUD Manager
+         */
         drawScore: function()
         {
             Rasputin.ctx.save();
@@ -245,6 +256,10 @@ mainGame.prototype =
 
         },
 
+        //Author: Tomas
+        /**
+         * This Draws the HighScore in te Hud Manager
+         */
         drawHiScore: function()
         {
             if(Rasputin.SCORE > Rasputin.HIGH_SCORE)
@@ -258,6 +273,11 @@ mainGame.prototype =
             Rasputin.ctx.restore();
         },
 
+        //Author: Tomas
+        /**
+         * This manages all the explosions throughout the game it is a unique manager method in the fact that itdoes not have any sub methods
+         * it renders each explosion and if the explosion has reached its end of life it sets its visibility to false
+         */
         explosionManager: function()
         {
             for(let i = 0; i < Rasputin.ExplosionArray.length; i +=1)
@@ -271,6 +291,9 @@ mainGame.prototype =
             }
         },
         //Author: Tomas
+        /**
+         * This is a simple pause function when it is called the game is paused when called again it is unpaused
+         */
         pause: function()
         {
             if(Rasputin.IsPause === false )
@@ -279,12 +302,18 @@ mainGame.prototype =
             }
             else if(Rasputin.IsPause === true)
             {
-                Rasputin.SONG_SOUND.pause();
+                // Rasputin.SONG_SOUND.pause();
                 Rasputin.IsPause = false;
             }
         },
 
         //Author: Tomas
+        /**
+         * This checks for multiple end conditions the main one being no lives however if the player strays too far offscreen they die
+         * It deducts lives if:
+         *  - Player collides with enemy
+         *  - Enemy Reaches endzone
+         */
         checkEndConditions: function()
         {
           Rasputin.EnemyReachesEnd();
@@ -292,16 +321,23 @@ mainGame.prototype =
           Rasputin.playerHitsBottomOrTop();
           Rasputin.CheckLives();
         },
+        //Author: Tomas
+        /**
+         * Checks if all lives are gone and calls the game and plays the game over music
+         */
         CheckLives: function()
         {
           if(Rasputin.Lives < 0)
           {
               Rasputin.IsOver = true;
-              console.log("Lives");
               Rasputin.playSound(Rasputin.DEATH_SOUND);
           }
         },
+
         //Author: Tomas
+        /**
+         * Checks If Enemies have reache the end zone and deducts a life
+         */
         EnemyReachesEnd: function()
         {
             for(let i = 0; i < Rasputin.EnemyArray.length; i+=1)
@@ -318,6 +354,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * Checks if enemies collide with a player and deducts a life
+         */
         EnemyCollidesWithPlayer: function()
         {
             for(let i = 0; i < Rasputin.EnemyArray.length; i+=1)
@@ -335,17 +374,22 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * Checks if a player collides with top or bottom and calls the game
+         */
         playerHitsBottomOrTop: function()
         {
           if((Rasputin.TestCharacter.y <= -30)|| (Rasputin.TestCharacter.y >= 300))
           {
               Rasputin.IsOver = true;
-              console.log("Top Bottom")
               Rasputin.playSound(Rasputin.DEATH_SOUND);
           }
         },
 
         //Author: Tomas
+        /**
+         * This controls the players with both the players gravity behaviour and its rendering
+         */
         characterManager: function()
         {
             Rasputin.TestCharacter.gravityBehaviour();
@@ -353,9 +397,14 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This Game starts the game by:
+         *  - Setting High Score
+         *  - Setting the spawn intervals
+         *  - Calls the GameLoop
+         */
         startGame: function()
         {
-            console.log("In start");
             Rasputin.HasStarted = true;
             // Rasputin.addLivesToArray();
             Rasputin.setHighScoreOnStart();
@@ -375,13 +424,11 @@ mainGame.prototype =
         //Author: Tomas
         difficultyManager: function()
         {
-            console.log("WELLL");
-            console.log(Rasputin.COUNTER);
+
             if(Rasputin.HasStarted)
             {
                 if(!Rasputin.IsPause && Rasputin.COUNTER === 0)
                 {
-                    console.log("in here");
                     Rasputin.spawnEnemy(1);
                 }
                 else
@@ -525,8 +572,6 @@ mainGame.prototype =
         //Author: Nathan
         spawnNuke: function()
         {
-            console.log(Rasputin.NukeArray);
-
             var z = Math.floor((Math.random() * 4) + 1);
 
             var y = Math.floor((Math.random() * 270) + 1);
@@ -848,7 +893,6 @@ mainGame.prototype =
             Rasputin.RESTARTLINK.addEventListener('click', function()
             {
                 Rasputin.restartGame();
-                console.log("FUCK ");
                 Rasputin.RESTARTTOAST.style.display = "none";
                 Rasputin.RESTARTTOAST.style.opacity = 0;
                 Rasputin.startGame();
@@ -859,7 +903,6 @@ mainGame.prototype =
         //Tomas
         AddTouchEventControllers: function()
         {
-            console.log("HEY");
             Rasputin.canvas.addEventListener('touchstart',Rasputin.touchStart);
             Rasputin.canvas.addEventListener('touchend',Rasputin.touchEnd);
             Rasputin.canvas.addEventListener('touchmove',Rasputin.touchPause)
