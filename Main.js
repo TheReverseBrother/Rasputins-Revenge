@@ -13,6 +13,7 @@ var mainGame = function()
     this.EndAnimID = 0;
     this.NukeID = 0;
     this.HeartID = 0;
+    this.BGMID = 0;
 
     //Counts
     this.COUNTER = 0;
@@ -100,11 +101,11 @@ var mainGame = function()
     this.BACKGROUND_IMAGE_OFFSET =0;
 
     //Sounds
-    this.SHOOTING_SOUND = new Audio("./Sounds/gunshot.mp3");
-    this.SONG1_SOUND = new Audio("./Sounds/Rasputin8Bit.mp3");
-    this.SONG2_SOUND = new Audio("./Sounds/RasputinRemix.mp3");
-    this.DEATH_SOUND = new Audio("./Sounds/GameOver.mp3");
-    this.NUKE_SOUND = new Audio("./Sounds/nuke.mp3");
+    this.SHOOTING_SOUND = new Audio("./Sounds/gunshot.wav");
+    this.SONG_SOUND = new Audio("./Sounds/Rasputin8Bit.mp3");
+    this.SONG_SOUND.loop = true;
+    this.DEATH_SOUND = new Audio("./Sounds/GameOver.wav");
+    this.NUKE_SOUND = new Audio("./Sounds/nuke.wav");
 
 
 
@@ -150,6 +151,7 @@ mainGame.prototype =
         //Author: Tomas
         GameUpdateLoop : function(now)
         {
+            MainGame.SONG_SOUND.play();
             // MainGame.refreshLoop();
             if(MainGame.IsPause === false && MainGame.IsOver === false)
             {
@@ -209,7 +211,7 @@ mainGame.prototype =
             MainGame.backgroundManager();
             MainGame.endAnimation();
             MainGame.endMenuText();
-
+            MainGame.SONG_SOUND.pause();
             if(MainGame.HasStarted === false)
             {
                 MainGame.EndAnimID = requestAnimationFrame(MainGame.GameOverMenu)
@@ -294,6 +296,7 @@ mainGame.prototype =
           {
               MainGame.IsOver = true;
               console.log("Lives");
+              MainGame.playSound(MainGame.DEATH_SOUND);
           }
         },
         //Author: Tomas
@@ -336,6 +339,7 @@ mainGame.prototype =
           {
               MainGame.IsOver = true;
               console.log("Top Bottom")
+              MainGame.playSound(MainGame.DEATH_SOUND);
           }
         },
 
@@ -356,8 +360,16 @@ mainGame.prototype =
             MainGame.IntervalID = setInterval(MainGame.difficultyManager,5000);
             MainGame.NukeID = setInterval(MainGame.spawnNuke,30000);
             MainGame.HeartID = setInterval(MainGame.spawnHeart, 20000);
+            // MainGame.BGMID = setInterval(MainGame.playBackGroundMusic, 244000);
             MainGame.GameUpdateLoop();
         },
+
+        playBackGroundMusic: function()
+        {
+            let i = MainGame.SONG_SOUND.play();
+        },
+
+
         //Author: Tomas
         difficultyManager: function()
         {
@@ -504,6 +516,7 @@ mainGame.prototype =
             let x = MainGame.TestCharacter.x + MainGame.TestCharacter.width;
             let y = MainGame.TestCharacter.y + 10;
             MainGame.BulletArray.push(new StaticObject(20,20,x, y,MainGame.SPRITEIMAGE, MainGame.BULLET ));
+            MainGame.playSound(MainGame.SHOOTING_SOUND);
 
         },
 
@@ -583,6 +596,7 @@ mainGame.prototype =
                                     MainGame.ExplosionArray.push(new AnimatedObject(MainGame.EXPLOSIONSPRITES,MainGame.Explosion,
                                         MainGame.EnemyArray[x].x,MainGame.EnemyArray[x].y,30,30,MainGame.STANDARD_DELAY));
                                     MainGame.EnemyArray[x].setInVisible();
+                                    MainGame.playSound(MainGame.NUKE_SOUND);
                                 }
                             }
                                 MainGame.SCORE += 5;
@@ -985,3 +999,4 @@ else
 }
 // window.addEventListener("resize", MainGame.fitScreen);
 window.addEventListener("orientationchange", MainGame.fitScreen);
+
