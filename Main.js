@@ -606,6 +606,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * This function will allow the nuke sprite to in every 30 seconds
+         */
         spawnNuke: function()
         {
             var z = Math.floor((Math.random() * 4) + 1);
@@ -617,6 +620,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * The nuke manager controls the nuke drawing, the movement, the player and nuke collision and the bullet nuke collision
+         */
         nukeManager: function()
         {
             Rasputin.renderNuke();
@@ -627,6 +633,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * Renders the nuke
+         */
         renderNuke: function()
         {
             for(let i = 0; i < Rasputin.NukeArray.length; i +=1)
@@ -636,6 +645,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * Makes the nuke move towards the left of the screen
+         */
         nukeMovementBehaviour: function()
         {
             for(let i = 0; i < Rasputin.NukeArray.length; i +=1)
@@ -645,6 +657,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * If the nuke collides with the player, player will lose two lives
+         */
         NukeCollidesWithPlayer: function()
         {
             for(let i = 0; i < Rasputin.NukeArray.length; i+=1)
@@ -660,6 +675,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * if the bullet collides with the nuke all the enemies will be killed
+         */
         bulletNukeCollision: function()
         {
             for(let i = 0; i < Rasputin.NukeArray.length; i +=1)
@@ -690,6 +708,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * Will spawn the heart onto the screen every 20 seconds
+         */
         spawnHeart: function(number)
         {
             {
@@ -701,6 +722,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * Manages the heart drawing, colliding and movement
+         */
         heartManager: function()
         {
             Rasputin.renderHeart();
@@ -710,6 +734,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * Will make the heart move to the left of the screen
+         */
         heartMovementBehaviour: function()
         {
             for(let i = 0; i < Rasputin.HeartArray.length; i +=1)
@@ -719,6 +746,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * will render the heart onto screen
+         */
         renderHeart: function()
         {
             for(let i = 0; i < Rasputin.HeartArray.length; i +=1)
@@ -728,6 +758,9 @@ mainGame.prototype =
         },
 
         //Author: Nathan
+        /**
+         * If the heart collides with player it will add a life
+         */
         HeartCollidesWithPlayer: function()
         {
             for(let i = 0; i < Rasputin.HeartArray.length; i+=1)
