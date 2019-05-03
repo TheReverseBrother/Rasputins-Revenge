@@ -95,3 +95,9 @@ body{
     font: 24px Roboto;
     text-shadow: 1px 1px 1px black;
 }
+#controls
+{
+    background-color: aqua;
+    border: 2px solid black;
+    color: red;
+}

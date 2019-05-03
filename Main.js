@@ -1119,6 +1119,10 @@ window.addEventListener('keydown', function(e){
             Rasputin.startGame();
         }
     }
+    if(key === 82)
+    {
+        Rasputin.restartGame();
+    }
 });
 
 //Tomas
@@ -1134,6 +1138,7 @@ if(Rasputin.mobile)
         Rasputin.ctx.drawImage(Rasputin.SPRITEIMAGE,Rasputin.BG_SPRITE_X, Rasputin.BG_SPRITE_Y,
             Rasputin.BG_SPRITE_WIDTH, Rasputin.BG_SPRITE_HEIGHT, Rasputin.BACKGROUND_IMAGE_OFFSET,0,Rasputin.CANVAS_WIDTH,Rasputin.CANVAS_HEIGHT);
     };
+    document.getElementById('controls').remove();
     Rasputin.startMobileMenu();
 }
 else
