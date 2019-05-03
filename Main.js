@@ -149,7 +149,7 @@ var mainGame = function()
 
 mainGame.prototype =
     {
-        //Author: Tomas
+        //Author: Tomas/Nathan
         /**
          * This Loop Is continously executed and controlls the main game all objects on screen and logic are managed through multiple managers in this loop
          * Each Manager is responsible for the behaviours of the objects the drawing of the objects and thecollision of the objects
@@ -201,7 +201,7 @@ mainGame.prototype =
             this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         },
 
-        //Author: Tomas
+        //Author: Tomas/Nathan
         /**
          *  This is the menu that controls the Game Over animation and menu Responsible for managing the background the End Condition Animation and the Menu
          */
@@ -344,7 +344,7 @@ mainGame.prototype =
             {
                 if(Rasputin.EnemyArray[i].getVisible())
                 {
-                    if(Rasputin.EnemyArray[i].x === - Rasputin.EnemyArray[i].width)
+                    if(Rasputin.EnemyArray[i].x < - Rasputin.EnemyArray[i].width)
                     {
                         Rasputin.Lives -=1;
                         Rasputin.EnemyArray[i].setInVisible();
@@ -422,6 +422,10 @@ mainGame.prototype =
 
 
         //Author: Tomas
+        /**
+         * This function is used to increment the dfficulty it does it in two stages by spawning numerous enemies and by
+         * changing their speed after ever 12 waves
+         */
         difficultyManager: function()
         {
 
@@ -445,6 +449,10 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This Function spawns enemies it takes in a number to spawn and spawns that number in various positions on x y plane
+         * @param number
+         */
         spawnEnemy: function(number)
         {
             Rasputin.COUNTER += 1;
@@ -459,6 +467,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * A default manager that controls both enemy behaviour and renders the enemies on the canvas
+         */
         enemyManager: function()
         {
             Rasputin.enemyMovementBehaviour();
@@ -467,6 +478,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This function renders Enemies
+         */
         renderEnemies: function()
         {
             for(let i = 0; i < Rasputin.EnemyArray.length; i +=1)
@@ -476,6 +490,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This Function ccontrolls the enemy movement behaviour and moves them according to the enemy behaviour
+         */
         enemyMovementBehaviour: function()
         {
             for(let i = 0; i < Rasputin.EnemyArray.length; i +=1)
@@ -485,6 +502,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This background manager simply scrolls the background
+         */
         backgroundManager: function()
         {
             Rasputin.BACKGROUND_IMAGE_OFFSET += -0.5;
@@ -508,6 +528,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * Bullet Manager controls bullet drawing bullet movement and bullet enemy collision
+         */
         bulletManager: function()
         {
             Rasputin.renderBullets();
@@ -516,6 +539,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * Checks if the bullet collides with an enemy and sets both to invisible, increments score and creates explosion
+         */
         bulletEnemyCollision: function()
         {
             for(let i = 0; i < Rasputin.EnemyArray.length; i +=1)
@@ -538,6 +564,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * Renders the bullets if they are set to visible
+         */
         renderBullets: function()
         {
             for(let i = 0; i < Rasputin.BulletArray.length; i +=1)
@@ -547,6 +576,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * Controls bullet behaviour in accordance with bullet speed
+         */
         bulletMovementBehaviour: function()
         {
             for(let i = 0; i < Rasputin.BulletArray.length; i +=1)
@@ -560,6 +592,9 @@ mainGame.prototype =
         },
 
         //Author: Tomas
+        /**
+         * This function creates a bullet where the gun barrel is and pushes it to the array
+         */
         createBullet: function()
         {
             let x = Rasputin.TestCharacter.x + Rasputin.TestCharacter.width;
@@ -673,6 +708,7 @@ mainGame.prototype =
 
         },
 
+        //Author: Nathan
         heartMovementBehaviour: function()
         {
             for(let i = 0; i < Rasputin.HeartArray.length; i +=1)
@@ -709,6 +745,9 @@ mainGame.prototype =
             }
         },
 
+        /**
+         * This Function resets all basic values back to their default seetings and sets player to start position
+         */
         restartGame: function()
         {
             Rasputin.COUNTER = 0;
@@ -727,6 +766,10 @@ mainGame.prototype =
             cancelAnimationFrame(Rasputin.EndAnimID);
         },
 
+        //Author: Tomas
+        /**
+         * Takes a cookie and sets high score on start
+         */
         setHighScoreOnStart: function()
         {
             let cookie =  document.cookie;
@@ -743,12 +786,19 @@ mainGame.prototype =
             }
         },
 
+        //Author : Tomas
+        /**
+         * Saves the high score after every game
+         */
         saveScore: function()
         {
             document.cookie = "high_SCORE=" +Rasputin.HIGH_SCORE;
         },
 
-
+        //Author : Tomas
+        /**
+         * This is the end animation it shows enemies rushing the player once you die
+         */
         endAnimation: function()
         {
           for(let i = 0 ; i < Rasputin.EndAnimationArray.length; i ++)
@@ -762,6 +812,10 @@ mainGame.prototype =
           }
         },
 
+        //Author : Tomas
+        /**
+         *  This Simply displays the end Test displaying high score score and waves completed
+         */
         endMenuText: function()
         {
             Rasputin.ctx.save();
@@ -780,6 +834,11 @@ mainGame.prototype =
 
         },
 
+        /**
+         * This is the generic play sound method it clones the sound and then plays it
+         * allowing multiple sounds to be played at once
+         * @param soundToPlay
+         */
         playSound: function(soundToPlay)
         {
             soundToPlay.cloneNode(true).play();
