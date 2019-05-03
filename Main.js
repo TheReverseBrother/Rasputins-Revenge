@@ -158,6 +158,7 @@ mainGame.prototype =
         {
             Rasputin.SONG_SOUND.play();
             // Rasputin.refreshLoop();
+            console.log(Rasputin.ExplosionArray)
             if(Rasputin.IsPause === false && Rasputin.IsOver === false)
             {
                 Rasputin.clear();
@@ -948,6 +949,7 @@ mainGame.prototype =
                 Rasputin.HasStarted = true;
                 Rasputin.CONTROLTOAST.style.display = "none";
                 Rasputin.CONTROLTOAST.style.opacity = 0;
+                Rasputin.startGame();
             });
             Rasputin.RESTARTLINK.addEventListener('click', function()
             {
