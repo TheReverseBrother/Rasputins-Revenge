@@ -1,13 +1,4 @@
 class StaticObject {
-    width;
-    height;
-    x;
-    y;
-    ImgSrc;
-    visible = true;
-    gravity = 0.05;
-    gravitySpeed = 0;
-    cell;
     constructor(width, height,posX, posY,ImgSrc,cells)
     {
         this.width = width;
@@ -16,6 +7,10 @@ class StaticObject {
         this.y = posY;
         this.ImgSrc = ImgSrc;
         this.cell = cells[0];
+        this.gravity = 0.05;
+        this.gravitySpeed = 0;
+        this.cell;
+        this. visible = true;
     }
 
     Draw(context)
@@ -104,20 +99,6 @@ class StaticObject {
 
 class AnimatedObject
 {
-    cellIndex = 1;
-    cells = [];
-    ImgSrc;
-    x;
-    y;
-    width;
-    height;
-    cell;
-    visible = true;
-    counter = 0;
-    gravity = 0.05;
-    gravitySpeed = 0;
-    delay;
-
     constructor(Image,cells,posX,posY,width,height,delay)
     {
         this.ImgSrc = Image;
@@ -127,6 +108,11 @@ class AnimatedObject
         this.width = width;
         this.height = height;
         this.delay = delay;
+        this.counter = 0;
+        this.gravity = 0.05;
+        this.gravitySpeed = 0;
+        this.visible = true;
+        this.cellIndex = 1;
     }
 
     render(context)
