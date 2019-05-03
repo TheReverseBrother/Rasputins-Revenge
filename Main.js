@@ -759,8 +759,8 @@ mainGame.prototype =
             Rasputin.ExplosionArray = [];
             Rasputin.NukeArray = [];
             Rasputin.HeartID = [];
-            Rasputin.lives = 2;
-            Rasputin.lives = true;
+            Rasputin.Lives = 2;
+            // Rasputin.lives = true;
             Rasputin.HasStarted = true;
             Rasputin.IsOver = false;
             Rasputin.TestCharacter = new AnimatedObject(this.SPRITEIMAGE,this.Charfly,20,20,60,60, this.CHTR_DELAY);;
@@ -783,7 +783,15 @@ mainGame.prototype =
             {
                 let split = cookie.split("=");
                 let x = split[1];
-                Rasputin.HIGH_SCORE = parseInt(x);
+                if(isNaN(x))
+                {
+                    Rasputin.HIGH_SCORE = 0;
+                }
+                else
+                {
+                    Rasputin.HIGH_SCORE = parseInt(x);
+                }
+
             }
         },
 
