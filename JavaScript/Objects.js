@@ -52,6 +52,9 @@ class StaticObject {
         return this.hascrash;
     }
 
+    /*
+     * This was made using help from W3Schools
+     */
     gravityBehaviour()
     {
         this.gravitySpeed += this.gravity;
